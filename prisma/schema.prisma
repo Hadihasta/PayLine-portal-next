@@ -1,9 +1,4 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
+// ===================== GENERATOR & DATASOURCE =====================
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
@@ -14,42 +9,208 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ===================== ROLES & PERMISSIONS =====================
 
-model User {
-  id          BigInt      @id @default(autoincrement())
-  email       String      @unique
-  name        String
-  phoneNumber String?
-  role        String?
-  is_active   Boolean     @default(true)
-  created_at  DateTime    @default(now())
-  updated_at  DateTime    @updatedAt
-  carts       Cart[]
-  orders      Order[]
+model Role {
+  id              BigInt               @id @default(autoincrement())
+  role_name       String
+  users           User[]
+  rolePermissions RolesPermissions[]
+  auditLogs       AuditLog[]
 }
 
+model Permission {
+  id              BigInt               @id @default(autoincrement())
+  name            String
+  rolePermissions RolesPermissions[]
+  auditLogs       AuditLog[]
+}
+
+model RolesPermissions {
+  role_id       BigInt
+  permission_id BigInt
+
+  role        Role        @relation(fields: [role_id], references: [id])
+  permission  Permission  @relation(fields: [permission_id], references: [id])
+
+  @@id([role_id, permission_id])
+  @@map("roles_permissions")
+}
+
+// ===================== USERS & AUTHS =====================
+
+model User {
+  id           BigInt       @id @default(autoincrement())
+  role_id      BigInt
+  email        String?
+  phone_number String
+  name         String
+  is_active    Boolean       @default(true)
+  created_at   DateTime      @default(now())
+  updated_at   DateTime      @default(now())
+
+  role         Role          @relation(fields: [role_id], references: [id])
+  auth         Auth?
+  carts        Cart[]
+  orders       Order[]
+  userStores   UsersStores[]
+  auditLogs    AuditLog[]
+
+  @@map("users")
+}
+
+model Auth {
+  id        BigInt  @id @default(autoincrement())
+  user_id   BigInt  @unique
+  username  String  @unique
+  password  String
+
+  user      User    @relation(fields: [user_id], references: [id])
+
+  @@map("auths")
+}
+
+// ===================== STORES & ACCESS =====================
+
+model Store {
+  id                BigInt              @id @default(autoincrement())
+  name              String
+  created_at        DateTime            @default(now())
+  updated_at        DateTime            @default(now())
+
+  storeAccessLinks  StoresStoreAccess[]
+  usersStores       UsersStores[]
+  menus             Menu[]
+  storeTables       StoreTable[]
+  carts             Cart[]
+  orders            Order[]
+  transactions      Transaction[]
+  auditLogs         AuditLog[]
+
+  @@map("stores")
+}
+
+// master data acces store
+model StoreAccess {
+  id         BigInt              @id @default(autoincrement())
+  name       String
+  storeLinks StoresStoreAccess[]
+
+  @@map("stores_access")
+}
+
+// store ada acces apa saja 
+model StoresStoreAccess {
+  store_id         BigInt
+  store_access_id  BigInt
+
+  store        Store        @relation(fields: [store_id], references: [id])
+  storeAccess  StoreAccess  @relation(fields: [store_access_id], references: [id])
+
+  @@id([store_id, store_access_id])
+  @@map("stores_store_access")
+}
+
+// 1 user dengan role owner bisa saja punya stores id banyak karena bisa punya cabang
+model UsersStores {
+  user_id  BigInt
+  store_id BigInt
+
+  user   User   @relation(fields: [user_id], references: [id])
+  store  Store  @relation(fields: [store_id], references: [id])
+
+  @@id([user_id, store_id])
+  @@map("users_stores")
+}
+
+// ===================== MENUS & ITEMS =====================
+
+model Menu {
+  id          BigInt     @id @default(autoincrement())
+  store_id    BigInt
+  name        String
+  created_at  DateTime   @default(now())
+  updated_at  DateTime   @default(now())
+
+  store       Store      @relation(fields: [store_id], references: [id])
+  items       Item[]
+
+  @@map("menus")
+}
+
+model Item {
+  id          BigInt     @id @default(autoincrement())
+  menu_id     BigInt
+  name        String
+  price       BigInt
+  category    String?
+  is_active   Boolean    @default(true)
+  created_at  DateTime   @default(now())
+  updated_at  DateTime   @default(now())
+
+  menu        Menu       @relation(fields: [menu_id], references: [id])
+  cartItems   CartsItems[]
+
+  @@map("items")
+}
+
+// ===================== TABLES & CARTS =====================
+
+model StoreTable {
+  id           BigInt     @id @default(autoincrement())
+  store_id     BigInt
+  table_number String
+  qr_code      String     @unique
+  created_at   DateTime   @default(now())
+  updated_at   DateTime   @default(now())
+
+  store        Store      @relation(fields: [store_id], references: [id])
+  carts        Cart[]
+
+  @@map("store_tables")
+}
+
+// user akan masukan ke keranjang item yang dipilih
 model Cart {
-  id          BigInt      @id @default(autoincrement())
-  user_id     BigInt
-  user        User        @relation(fields: [user_id], references: [id])
-  created_at  DateTime    @default(now())
-  updated_at  DateTime    @updatedAt
+  id           BigInt       @id @default(autoincrement())
+  user_id      BigInt
+  store_id     BigInt
+  table_id     BigInt
+  total_cost   BigInt?
+  created_at   DateTime     @default(now())
+  updated_at   DateTime     @default(now())
 
-  // Relasi ke Payment (1 cart : 1 payment)
-  payment     Payment?    @relation("CartPayment")
-
-  // Relasi ke Order (1 cart : 1 order)
-  order       Order?
+  user         User         @relation(fields: [user_id], references: [id])
+  store        Store        @relation(fields: [store_id], references: [id])
+  table        StoreTable   @relation(fields: [table_id], references: [id])
+  cartItems    CartsItems[]
+  payment      Payment?
+  order        Order?
 
   @@map("carts")
 }
 
+model CartsItems {
+  id         BigInt   @id @default(autoincrement())
+  cart_id    BigInt
+  item_id    BigInt
+  quantity   BigInt
+  price      BigInt
+
+  cart       Cart     @relation(fields: [cart_id], references: [id])
+  item       Item     @relation(fields: [item_id], references: [id])
+
+  @@map("carts_items")
+}
+
+// ===================== PAYMENTS & ORDERS =====================
+
 model Payment {
   id              BigInt     @id @default(autoincrement())
-  cart_id         BigInt     @unique                     // penting untuk 1:1
+  cart_id         BigInt     @unique
   method          String
   midtrans_id     String?
-  gross_amount    Decimal
+  gross_amount    Decimal    @db.Decimal(12, 2)
   payment_method  String?
   bank            String?
   payment_receipt String?
@@ -58,27 +219,68 @@ model Payment {
   midtrans_data   Json?
   paid_at         DateTime   @default(now())
 
-  // Relasi ke Cart (1:1)
-  cart            Cart       @relation("CartPayment", fields: [cart_id], references: [id])
-
-  // Relasi opsional ke Order (1 payment : 1 order)
+  cart            Cart       @relation(fields: [cart_id], references: [id])
   order           Order?
 
   @@map("payments")
 }
 
 model Order {
-  id              BigInt     @id @default(autoincrement())
-  user_id         BigInt
-  cart_id         BigInt     @unique                     // karena 1 cart = 1 order
-  payment_id      BigInt?    @unique                     // karena 1 order = 1 payment (opsional)
-  status          String     @default("pending")
-  created_at      DateTime   @default(now())
-  updated_at      DateTime   @updatedAt
+  id          BigInt     @id @default(autoincrement())
+  user_id     BigInt
+  payment_id  BigInt     @unique
+  store_id    BigInt
+  cart_id     BigInt     @unique // ⬅ tambahkan ini biar relasi ke Cart valid
+  status      String?
+  created_at  DateTime   @default(now())
+  updated_at  DateTime   @default(now())
 
-  user            User       @relation(fields: [user_id], references: [id])
-  cart            Cart       @relation(fields: [cart_id], references: [id])
-  payment         Payment?   @relation(fields: [payment_id], references: [id])
+  user        User       @relation(fields: [user_id], references: [id])
+  payment     Payment    @relation(fields: [payment_id], references: [id])
+  store       Store      @relation(fields: [store_id], references: [id])
+  cart        Cart       @relation(fields: [cart_id], references: [id])
+  transaction Transaction?
 
   @@map("orders")
+}
+
+// ===================== TRANSACTIONS & AUDIT LOGS =====================
+
+model Transaction {
+  id          BigInt     @id @default(autoincrement())
+  store_id    BigInt
+  order_id    BigInt     @unique // ⬅ 1:1 relasi dengan order harus unik
+  income      BigInt
+  detail      Json?
+  created_at  DateTime   @default(now())
+  updated_at  DateTime   @default(now())
+
+  store       Store      @relation(fields: [store_id], references: [id])
+  order       Order      @relation(fields: [order_id], references: [id])
+
+  @@map("transactions")
+}
+
+model AuditLog {
+  id               BigInt     @id @default(autoincrement())
+  user_id          BigInt
+  role_id          BigInt
+  permission_id    BigInt
+  store_id         BigInt
+  old_data         Json?
+  new_data         Json?
+  title            String?
+  description      String?
+  action           String?
+  ip_address       String?
+  user_access_from String?
+  status           String?
+  created_at       DateTime   @default(now())
+
+  user        User        @relation(fields: [user_id], references: [id])
+  role        Role        @relation(fields: [role_id], references: [id])
+  permission  Permission  @relation(fields: [permission_id], references: [id])
+  store       Store       @relation(fields: [store_id], references: [id])
+
+  @@map("audit_logs")
 }
