@@ -90,6 +90,7 @@ model Store {
   @@map("stores")
 }
 
+// master data acces store
 model StoreAccess {
   id         BigInt              @id @default(autoincrement())
   name       String
@@ -98,6 +99,7 @@ model StoreAccess {
   @@map("stores_access")
 }
 
+// store ada acces apa saja 
 model StoresStoreAccess {
   store_id         BigInt
   store_access_id  BigInt
@@ -109,6 +111,7 @@ model StoresStoreAccess {
   @@map("stores_store_access")
 }
 
+// 1 user dengan role owner bisa saja punya stores id banyak karena bisa punya cabang
 model UsersStores {
   user_id  BigInt
   store_id BigInt
@@ -167,6 +170,7 @@ model StoreTable {
   @@map("store_tables")
 }
 
+// user akan masukan ke keranjang item yang dipilih
 model Cart {
   id           BigInt       @id @default(autoincrement())
   user_id      BigInt
