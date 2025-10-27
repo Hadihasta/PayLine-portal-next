@@ -1,8 +1,10 @@
-import React from 'react'
+import RegisterPage from '@/component/auth/register/RegisterPage'
 
 const page = () => {
   return (
-    <div>page</div>
+    <>
+      <RegisterPage />
+    </>
   )
 }
 
