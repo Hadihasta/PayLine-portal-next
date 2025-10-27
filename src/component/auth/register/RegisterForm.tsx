@@ -16,15 +16,20 @@ type Action =
   | { type: 'setUsername'; value: RegisterForm['username'] }
   | { type: 'setPassword'; value: RegisterForm['password'] }
 
-const initialState: RegisterForm = { name: '', email: '', phone_number: '', username: '', password:''}
-
+const initialState: RegisterForm = { name: '', email: '', phone_number: '', username: '', password: '' }
 
 function stateReducer(state: RegisterForm, action: Action): RegisterForm {
   switch (action.type) {
     case 'reset':
       return initialState
+    case 'setName':
+      return { ...state, name: action.value }
     case 'setEmail':
       return { ...state, email: action.value }
+    case 'setPhoneNumber':
+      return { ...state, phone_number: action.value }
+    case 'setUsername':
+      return { ...state, username: action.value }
     case 'setPassword':
       return { ...state, password: action.value }
     default:
@@ -34,7 +39,35 @@ function stateReducer(state: RegisterForm, action: Action): RegisterForm {
 
 const RegisterForm = () => {
   const [state, dispatch] = useReducer(stateReducer, initialState)
-  
+
+  const changeHandler = (key: string, e: ChangeEvent<HTMLInputElement>) => {
+    switch (key) {
+      case 'name':
+        console.log(e.target.value , 'from name')
+        dispatch({ type: 'setName', value: e.target.value })
+        break
+      case 'email':
+        console.log(e.target.value, 'from emaill')
+        dispatch({ type: 'setEmail', value: e.target.value })
+        break
+      case 'phone_number':
+        console.log(e.target.value)
+        dispatch({ type: 'setPhoneNumber', value: e.target.value })
+        break
+      case 'username':
+        console.log(e.target.value)
+        dispatch({ type: 'setUsername', value: e.target.value })
+        break
+      case 'password':
+        console.log(e.target.value)
+        dispatch({ type: 'setPassword', value: e.target.value })
+        break
+
+      default:
+        break
+    }
+  }
+
   return (
     <>
       <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
@@ -54,7 +87,9 @@ const RegisterForm = () => {
               <input
                 type="email"
                 className="input-field"
-                placeholder="Masukan email"
+                placeholder="Masukan Nama"
+                value={state.name}
+                onChange={(e) => changeHandler('name', e)}
               />
             </div>
 
@@ -66,6 +101,8 @@ const RegisterForm = () => {
                 type="email"
                 className="input-field"
                 placeholder="Masukan email"
+                value={state.email}
+                onChange={(e) => changeHandler('email', e)}
               />
             </div>
 
@@ -77,6 +114,8 @@ const RegisterForm = () => {
                 type="email"
                 className="input-field"
                 placeholder="Masukan email"
+                value={state.phone_number}
+                onChange={(e) => changeHandler('phone_number', e)}
               />
             </div>
 
@@ -88,6 +127,8 @@ const RegisterForm = () => {
                 type="email"
                 className="input-field"
                 placeholder="Masukan email"
+                value={state.username}
+                onChange={(e) => changeHandler('username', e)}
               />
             </div>
 
@@ -99,6 +140,8 @@ const RegisterForm = () => {
                 type="password"
                 className="input-field"
                 placeholder="Masukan kata sandi"
+                value={state.password}
+                onChange={(e) => changeHandler('password', e)}
               />
             </div>
           </div>
