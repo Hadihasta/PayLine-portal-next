@@ -13,8 +13,8 @@ datasource db {
 
 model Role {
   id              BigInt               @id @default(autoincrement())
-  role_name       String
-  users           User[]
+  role_name       String                @unique
+  users           User[]  
   rolePermissions RolesPermissions[]
   auditLogs       AuditLog[]
 }
