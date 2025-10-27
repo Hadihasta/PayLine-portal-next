@@ -13,8 +13,8 @@ datasource db {
 
 model Role {
   id              BigInt               @id @default(autoincrement())
-  role_name       String
-  users           User[]
+  role_name       String                @unique
+  users           User[]  
   rolePermissions RolesPermissions[]
   auditLogs       AuditLog[]
 }
@@ -41,7 +41,7 @@ model RolesPermissions {
 
 model User {
   id           BigInt       @id @default(autoincrement())
-  role_id      BigInt
+  role_id      BigInt?
   email        String?
   phone_number String
   name         String
@@ -49,7 +49,7 @@ model User {
   created_at   DateTime      @default(now())
   updated_at   DateTime      @default(now())
 
-  role         Role          @relation(fields: [role_id], references: [id])
+  role         Role?         @relation(fields: [role_id], references: [id]) 
   auth         Auth?
   carts        Cart[]
   orders       Order[]
