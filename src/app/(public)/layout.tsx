@@ -1,5 +1,5 @@
 import { Nunito } from 'next/font/google'
-import '@/styles/globals.css'
+import '@/style/globals.css'
 // import Navbar from '@/components/global/Navbar'
 
 const nunito = Nunito({

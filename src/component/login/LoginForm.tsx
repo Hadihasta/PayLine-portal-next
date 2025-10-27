@@ -1,16 +1,27 @@
+'use client'
 import Button from '@/component/global/Button'
+import { useRouter } from 'next/navigation'
 const LoginForm = () => {
+
+
+
+  const router = useRouter()
+
+  const redirectPageHandler = () => { 
+    router.push('/register')
+    console.log("redirect")
+  } 
+
   return (
-  
-      <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
+    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start shadow-form p-[40px] w-[500px] rounded-[8px] ">
         <div>
-          <div className="font-bold">Masuk Ke Portal Hiring</div>
+          <div className="font-bold">Masuk Ke Portal Payline</div>
           <div className="text-sm">
             Belum punya akun?{' '}
-            <span className="text-greenPrimary underline underline-offset-1 cursor-pointer">
+            <button onClick={redirectPageHandler} className="text-greenPrimary underline underline-offset-1 cursor-pointer">
               Daftar menggunakan email
-            </span>
+            </button>
           </div>
         </div>
 
