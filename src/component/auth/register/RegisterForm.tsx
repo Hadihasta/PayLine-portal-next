@@ -15,7 +15,7 @@ const RegisterForm = () => {
           >
             <div className="flex flex-col gap-3 ">
               <span className="text-xs">
-                Nama Toko <span className="text-red-700 text-xs">*</span>
+                Nama  <span className="text-red-700 text-xs">*</span>
               </span>
               <input
                 type="email"

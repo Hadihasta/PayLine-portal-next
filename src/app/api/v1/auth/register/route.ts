@@ -1,23 +1,64 @@
-
-
+import { prisma } from "@/lib/prisma"
+import { hashPassword } from "@/lib/bcrypt"
+import { serializeBigInt } from "@/lib/serializeBigIntToString"
 
 export async function POST(req: Request) {
   try {
+    const { name, email, phone_number, username, password } = await req.json()
 
-    const {nama_toko ,  email, phone_number,username , password} = await req.json()
+     if (!name || !phone_number || !username || !password) {
+      return Response.json({ error: "Missing required fields" }, { status: 400 })
+    }
+
+    // Cek apakah username atau email sudah terdaftar
+    const existingAuth = await prisma.auth.findFirst({
+      where: {
+        OR: [{ username }, { user: { email } }],
+      },
+    })
+
+    if (existingAuth) {
+      return Response.json({ error: "Username or email already registered" }, { status: 409 })
+    }
 
 
+     // Hash password pakai bcrypt-ts
+    const hashedPassword = await hashPassword(password)
 
-    
-    console.log (nama_toko , email, phone_number,username , password)
-       return Response.json(
-      { message: 'Account created successfully' },
+
+      // Buat user baru beserta auth dan store-nya
+    const newUser = await prisma.user.create({
+      data: {
+        name,
+        email,
+        phone_number,
+        auth: {
+          create: {
+            username,
+            password: hashedPassword,
+          },
+        },
+       
+      },
+      include: {
+        auth: true,
+      },
+    })
+
+    console.log(name, email, phone_number, username, password)
+    return Response.json(
+      {
+        message: "Account created successfully",
+        data: {
+          id: serializeBigInt(newUser.id),
+          username: newUser.auth?.username,
+        },
+      },
       { status: 201 }
     )
-  } catch (reason) {
-    const message =
-      reason instanceof Error ? reason.message : 'Unexpected error'
- 
-    return Response.json(message, { status: 500 })
+  } catch (error) {
+    // const message = reason instanceof Error ? reason.message : 'Unexpected error'
+      console.error('Login error:', error)
+    return Response.json({ error: 'Internal server error' , status: 500 },{ status: 500 } )
   }
 }
