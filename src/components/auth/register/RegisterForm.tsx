@@ -67,10 +67,8 @@ const RegisterForm = () => {
 
   const submitHandler = async () => {
     try {
-    
       const res = await registerAccount(state)
       console.log(res)
-      
     } catch (error) {
       console.log(error, ' <<<<< ')
     }
