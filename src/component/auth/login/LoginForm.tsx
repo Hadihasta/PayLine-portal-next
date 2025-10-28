@@ -1,12 +1,64 @@
 'use client'
 import Button from '@/component/global/Button'
 import { useRouter } from 'next/navigation'
+import { useReducer, ChangeEvent } from 'react'
+import { login } from '@/services/authservice'
+
+interface LoginForm {
+  username: string
+  password: string
+}
+
+type Action =
+  | { type: 'reset' }
+  | { type: 'setUsername'; value: LoginForm['username'] }
+  | { type: 'setPassword'; value: LoginForm['password'] }
+
+const initialState: LoginForm = { username: '', password: '' }
+
+function stateReducer(state: LoginForm, action: Action): LoginForm {
+  switch (action.type) {
+    case 'reset':
+      return initialState
+    case 'setUsername':
+      return { ...state, username: action.value }
+    case 'setPassword':
+      return { ...state, password: action.value }
+
+    default:
+      throw new Error('Unknown action')
+  }
+}
+
 const LoginForm = () => {
+  const [state, dispatch] = useReducer(stateReducer, initialState)
+
   const router = useRouter()
 
   const redirectPageHandler = () => {
     router.push('/register')
-    console.log('redirect')
+  }
+
+  const changeHandler = (key: string, e: ChangeEvent<HTMLInputElement>) => {
+    switch (key) {
+      case 'username':
+        dispatch({ type: 'setUsername', value: e.target.value })
+        break
+      case 'password':
+        dispatch({ type: 'setPassword', value: e.target.value })
+        break
+      default:
+        break
+    }
+  }
+
+  const handleSubmit = async () => {
+   try {
+     const res = await login(state)
+    console.log('fetch', res)
+   } catch (error) {
+    console.log(error, " <<<< ")
+   }
   }
 
   return (
@@ -37,6 +89,8 @@ const LoginForm = () => {
               type="email"
               className="input-field"
               placeholder="Masukan email"
+              value={state.username}
+              onChange={(e) => changeHandler('username', e)}
             />
           </div>
 
@@ -48,6 +102,8 @@ const LoginForm = () => {
               type="password"
               className="input-field"
               placeholder="Masukan kata sandi"
+              value={state.password}
+              onChange={(e) => changeHandler('password', e)}
             />
           </div>
 
@@ -58,6 +114,7 @@ const LoginForm = () => {
           color={'yellow'}
           label="Masuk"
           className={'w-full '}
+          onClick={handleSubmit}
         />
 
         <div className="flex items-center w-full text-gray-400  text-xs">

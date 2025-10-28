@@ -1,5 +1,7 @@
 'use client'
 import { useReducer, ChangeEvent } from 'react'
+import Button from '@/component/global/Button'
+import { registerAccount } from '@/services/authservice'
 
 interface RegisterForm {
   name: string
@@ -16,15 +18,20 @@ type Action =
   | { type: 'setUsername'; value: RegisterForm['username'] }
   | { type: 'setPassword'; value: RegisterForm['password'] }
 
-const initialState: RegisterForm = { name: '', email: '', phone_number: '', username: '', password:''}
-
+const initialState: RegisterForm = { name: '', email: '', phone_number: '', username: '', password: '' }
 
 function stateReducer(state: RegisterForm, action: Action): RegisterForm {
   switch (action.type) {
     case 'reset':
       return initialState
+    case 'setName':
+      return { ...state, name: action.value }
     case 'setEmail':
       return { ...state, email: action.value }
+    case 'setPhoneNumber':
+      return { ...state, phone_number: action.value }
+    case 'setUsername':
+      return { ...state, username: action.value }
     case 'setPassword':
       return { ...state, password: action.value }
     default:
@@ -34,7 +41,41 @@ function stateReducer(state: RegisterForm, action: Action): RegisterForm {
 
 const RegisterForm = () => {
   const [state, dispatch] = useReducer(stateReducer, initialState)
-  
+
+  const changeHandler = (key: string, e: ChangeEvent<HTMLInputElement>) => {
+    switch (key) {
+      case 'name':
+        dispatch({ type: 'setName', value: e.target.value })
+        break
+      case 'email':
+        dispatch({ type: 'setEmail', value: e.target.value })
+        break
+      case 'phone_number':
+        dispatch({ type: 'setPhoneNumber', value: e.target.value })
+        break
+      case 'username':
+        dispatch({ type: 'setUsername', value: e.target.value })
+        break
+      case 'password':
+        dispatch({ type: 'setPassword', value: e.target.value })
+        break
+
+      default:
+        break
+    }
+  }
+
+  const submitHandler = async () => {
+    try {
+    
+      const res = await registerAccount(state)
+      console.log(res)
+      
+    } catch (error) {
+      console.log(error, ' <<<<< ')
+    }
+  }
+
   return (
     <>
       <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
@@ -52,9 +93,11 @@ const RegisterForm = () => {
                 Nama <span className="text-red-700 text-xs">*</span>
               </span>
               <input
-                type="email"
+                type="text"
                 className="input-field"
-                placeholder="Masukan email"
+                placeholder="Masukan Nama"
+                value={state.name}
+                onChange={(e) => changeHandler('name', e)}
               />
             </div>
 
@@ -66,6 +109,8 @@ const RegisterForm = () => {
                 type="email"
                 className="input-field"
                 placeholder="Masukan email"
+                value={state.email}
+                onChange={(e) => changeHandler('email', e)}
               />
             </div>
 
@@ -74,9 +119,11 @@ const RegisterForm = () => {
                 Phone Number <span className="text-red-700 text-xs">*</span>
               </span>
               <input
-                type="email"
+                type="number"
                 className="input-field"
                 placeholder="Masukan email"
+                value={state.phone_number}
+                onChange={(e) => changeHandler('phone_number', e)}
               />
             </div>
 
@@ -85,9 +132,11 @@ const RegisterForm = () => {
                 Username<span className="text-red-700 text-xs">*</span>
               </span>
               <input
-                type="email"
+                type="text"
                 className="input-field"
                 placeholder="Masukan email"
+                value={state.username}
+                onChange={(e) => changeHandler('username', e)}
               />
             </div>
 
@@ -99,8 +148,17 @@ const RegisterForm = () => {
                 type="password"
                 className="input-field"
                 placeholder="Masukan kata sandi"
+                value={state.password}
+                onChange={(e) => changeHandler('password', e)}
               />
             </div>
+
+            <Button
+              color={'yellow'}
+              label="Masuk"
+              className={'w-full '}
+              onClick={submitHandler}
+            />
           </div>
 
           {/* <div className="flex items-center w-full text-gray-400  text-xs">
