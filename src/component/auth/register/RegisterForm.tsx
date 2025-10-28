@@ -1,5 +1,6 @@
 'use client'
 import { useReducer, ChangeEvent } from 'react'
+import Button from '@/component/global/Button'
 
 interface RegisterForm {
   name: string
@@ -66,6 +67,11 @@ const RegisterForm = () => {
       default:
         break
     }
+  }
+
+
+  const submitHandler = () => {
+    console.log("fetch api" , state)
   }
 
   return (
@@ -144,6 +150,14 @@ const RegisterForm = () => {
                 onChange={(e) => changeHandler('password', e)}
               />
             </div>
+
+
+          <Button
+          color={'yellow'}
+          label="Masuk"
+          className={'w-full '}
+          onClick={submitHandler}
+        />
           </div>
 
           {/* <div className="flex items-center w-full text-gray-400  text-xs">

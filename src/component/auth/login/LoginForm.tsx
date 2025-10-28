@@ -1,12 +1,61 @@
 'use client'
 import Button from '@/component/global/Button'
 import { useRouter } from 'next/navigation'
+import { useReducer, ChangeEvent } from 'react'
+
+interface LoginForm {
+  email: string
+  password: string
+}
+
+type Action =
+  | { type: 'reset' }
+  | { type: 'setEmail'; value: LoginForm['email'] }
+  | { type: 'setPassword'; value: LoginForm['password'] }
+
+const initialState: LoginForm = { email: '', password: '' }
+
+function stateReducer(state: LoginForm, action: Action): LoginForm {
+  switch (action.type) {
+    case 'reset':
+      return initialState
+    case 'setEmail':
+      return { ...state, email: action.value }
+    case 'setPassword':
+      return { ...state, password: action.value }
+
+    default:
+      throw new Error('Unknown action')
+  }
+}
+
 const LoginForm = () => {
+  const [state, dispatch] = useReducer(stateReducer, initialState)
+
   const router = useRouter()
 
   const redirectPageHandler = () => {
     router.push('/register')
     console.log('redirect')
+  }
+
+  const changeHandler = (key: string, e: ChangeEvent<HTMLInputElement>) => {
+    switch (key) {
+      case 'email':
+        console.log(e.target.value, 'from name')
+        dispatch({ type: 'setEmail', value: e.target.value })
+        break
+      case 'password':
+        console.log(e.target.value, 'from emaill')
+        dispatch({ type: 'setPassword', value: e.target.value })
+        break
+      default:
+        break
+    }
+  }
+
+const handleSubmit = () => {
+    console.log('fetch', state)
   }
 
   return (
@@ -37,6 +86,8 @@ const LoginForm = () => {
               type="email"
               className="input-field"
               placeholder="Masukan email"
+               value={state.email}
+                onChange={(e) => changeHandler('email', e)}
             />
           </div>
 
@@ -48,6 +99,8 @@ const LoginForm = () => {
               type="password"
               className="input-field"
               placeholder="Masukan kata sandi"
+                 value={state.password}
+                onChange={(e) => changeHandler('password', e)}
             />
           </div>
 
@@ -58,6 +111,7 @@ const LoginForm = () => {
           color={'yellow'}
           label="Masuk"
           className={'w-full '}
+          onClick={handleSubmit}
         />
 
         <div className="flex items-center w-full text-gray-400  text-xs">
