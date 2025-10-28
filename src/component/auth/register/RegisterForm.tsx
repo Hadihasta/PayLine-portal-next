@@ -67,9 +67,10 @@ const RegisterForm = () => {
 
   const submitHandler = async () => {
     try {
-      console.log('fetch api', state)
+    
       const res = await registerAccount(state)
       console.log(res)
+      
     } catch (error) {
       console.log(error, ' <<<<< ')
     }

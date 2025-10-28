@@ -53,8 +53,12 @@ const LoginForm = () => {
   }
 
   const handleSubmit = async () => {
-    const res = await login(state)
+   try {
+     const res = await login(state)
     console.log('fetch', res)
+   } catch (error) {
+    console.log(error, " <<<< ")
+   }
   }
 
   return (
