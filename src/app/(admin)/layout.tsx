@@ -1,6 +1,8 @@
 import { Nunito } from 'next/font/google'
 import '@/style/globals.css'
 // import Navbar from '@/components/global/Navbar'
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
+import SidebarApp from '@/component/global/SidebarApp'
 
 const nunito = Nunito({
   variable: '--font-nunito',
@@ -15,9 +17,13 @@ export default function RootLayout({
 }>) {
   return (
     <>
-      <main className={`${nunito.variable} antialiased`}>
-        {children}
-      </main>
+      <SidebarProvider>
+        <SidebarApp />
+        <main className={`${nunito.variable} antialiased`}>
+          <SidebarTrigger />
+          {children}
+        </main>
+      </SidebarProvider>
     </>
   )
 }
