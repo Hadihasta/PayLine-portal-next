@@ -2,25 +2,26 @@
 import Button from '@/component/global/Button'
 import { useRouter } from 'next/navigation'
 import { useReducer, ChangeEvent } from 'react'
+import { login } from '@/services/authservice'
 
 interface LoginForm {
-  email: string
+  username: string
   password: string
 }
 
 type Action =
   | { type: 'reset' }
-  | { type: 'setEmail'; value: LoginForm['email'] }
+  | { type: 'setUsername'; value: LoginForm['username'] }
   | { type: 'setPassword'; value: LoginForm['password'] }
 
-const initialState: LoginForm = { email: '', password: '' }
+const initialState: LoginForm = { username: '', password: '' }
 
 function stateReducer(state: LoginForm, action: Action): LoginForm {
   switch (action.type) {
     case 'reset':
       return initialState
-    case 'setEmail':
-      return { ...state, email: action.value }
+    case 'setUsername':
+      return { ...state, username: action.value }
     case 'setPassword':
       return { ...state, password: action.value }
 
@@ -36,17 +37,14 @@ const LoginForm = () => {
 
   const redirectPageHandler = () => {
     router.push('/register')
-    console.log('redirect')
   }
 
   const changeHandler = (key: string, e: ChangeEvent<HTMLInputElement>) => {
     switch (key) {
-      case 'email':
-        console.log(e.target.value, 'from name')
-        dispatch({ type: 'setEmail', value: e.target.value })
+      case 'username':
+        dispatch({ type: 'setUsername', value: e.target.value })
         break
       case 'password':
-        console.log(e.target.value, 'from emaill')
         dispatch({ type: 'setPassword', value: e.target.value })
         break
       default:
@@ -54,8 +52,9 @@ const LoginForm = () => {
     }
   }
 
-const handleSubmit = () => {
-    console.log('fetch', state)
+  const handleSubmit = async () => {
+    const res = await login(state)
+    console.log('fetch', res)
   }
 
   return (
@@ -86,8 +85,8 @@ const handleSubmit = () => {
               type="email"
               className="input-field"
               placeholder="Masukan email"
-               value={state.email}
-                onChange={(e) => changeHandler('email', e)}
+              value={state.username}
+              onChange={(e) => changeHandler('username', e)}
             />
           </div>
 
@@ -99,8 +98,8 @@ const handleSubmit = () => {
               type="password"
               className="input-field"
               placeholder="Masukan kata sandi"
-                 value={state.password}
-                onChange={(e) => changeHandler('password', e)}
+              value={state.password}
+              onChange={(e) => changeHandler('password', e)}
             />
           </div>
 
