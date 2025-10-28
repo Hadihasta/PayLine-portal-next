@@ -1,5 +1,5 @@
 import React from 'react'
-import SidebarApp from '@/component/global/SidebarApp'
+import SidebarApp from '@/components/global/SidebarApp'
 
 
 const page = () => {

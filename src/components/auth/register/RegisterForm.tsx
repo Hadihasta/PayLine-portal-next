@@ -1,6 +1,6 @@
 'use client'
 import { useReducer, ChangeEvent } from 'react'
-import Button from '@/component/global/Button'
+import Button from '@/components/global/Button'
 import { registerAccount } from '@/services/authservice'
 
 interface RegisterForm {
