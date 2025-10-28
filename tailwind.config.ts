@@ -1,6 +1,8 @@
-/** @type {import('tailwindcss').Config} */
-const config = {
-  content: ['./app/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
+import animate from "tailwindcss-animate"
+import type { Config } from "tailwindcss"
+
+const config: Config = {
+  content: ['./app/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}',  "./src/**/*.{js,ts,jsx,tsx,css}"],
   theme: {
     extend: {
       fontFamily: {
@@ -8,6 +10,7 @@ const config = {
       },
     },
   },
+  plugins: [animate],
 }
 
 export default config
