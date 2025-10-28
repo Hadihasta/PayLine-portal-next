@@ -1,6 +1,7 @@
 'use client'
 import { useReducer, ChangeEvent } from 'react'
 import Button from '@/component/global/Button'
+import { registerAccount } from '@/services/authservice'
 
 interface RegisterForm {
   name: string
@@ -44,23 +45,18 @@ const RegisterForm = () => {
   const changeHandler = (key: string, e: ChangeEvent<HTMLInputElement>) => {
     switch (key) {
       case 'name':
-        console.log(e.target.value , 'from name')
         dispatch({ type: 'setName', value: e.target.value })
         break
       case 'email':
-        console.log(e.target.value, 'from emaill')
         dispatch({ type: 'setEmail', value: e.target.value })
         break
       case 'phone_number':
-        console.log(e.target.value)
         dispatch({ type: 'setPhoneNumber', value: e.target.value })
         break
       case 'username':
-        console.log(e.target.value)
         dispatch({ type: 'setUsername', value: e.target.value })
         break
       case 'password':
-        console.log(e.target.value)
         dispatch({ type: 'setPassword', value: e.target.value })
         break
 
@@ -69,9 +65,14 @@ const RegisterForm = () => {
     }
   }
 
-
-  const submitHandler = () => {
-    console.log("fetch api" , state)
+  const submitHandler = async () => {
+    try {
+      console.log('fetch api', state)
+      const res = await registerAccount(state)
+      console.log(res)
+    } catch (error) {
+      console.log(error, ' <<<<< ')
+    }
   }
 
   return (
@@ -91,7 +92,7 @@ const RegisterForm = () => {
                 Nama <span className="text-red-700 text-xs">*</span>
               </span>
               <input
-                type="email"
+                type="text"
                 className="input-field"
                 placeholder="Masukan Nama"
                 value={state.name}
@@ -117,7 +118,7 @@ const RegisterForm = () => {
                 Phone Number <span className="text-red-700 text-xs">*</span>
               </span>
               <input
-                type="email"
+                type="number"
                 className="input-field"
                 placeholder="Masukan email"
                 value={state.phone_number}
@@ -130,7 +131,7 @@ const RegisterForm = () => {
                 Username<span className="text-red-700 text-xs">*</span>
               </span>
               <input
-                type="email"
+                type="text"
                 className="input-field"
                 placeholder="Masukan email"
                 value={state.username}
@@ -151,13 +152,12 @@ const RegisterForm = () => {
               />
             </div>
 
-
-          <Button
-          color={'yellow'}
-          label="Masuk"
-          className={'w-full '}
-          onClick={submitHandler}
-        />
+            <Button
+              color={'yellow'}
+              label="Masuk"
+              className={'w-full '}
+              onClick={submitHandler}
+            />
           </div>
 
           {/* <div className="flex items-center w-full text-gray-400  text-xs">
