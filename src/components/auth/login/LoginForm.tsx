@@ -6,6 +6,7 @@ import { login } from '@/services/authservice'
 import { ToasterNotif } from '@/components/global/ToasterNotif'
 import { AxiosError } from 'axios'
 import { ErrorResponse } from '@/services/authservice'
+import { useAuthStore } from '@/store/authStore'
 
 interface LoginForm {
   username: string
@@ -36,6 +37,9 @@ function stateReducer(state: LoginForm, action: Action): LoginForm {
 const LoginForm = () => {
   const [state, dispatch] = useReducer(stateReducer, initialState)
 
+    // Zustand
+  const setAuth = useAuthStore((state) => state.setAuth)
+
   const router = useRouter()
 
   const redirectPageHandler = () => {
@@ -61,8 +65,9 @@ const LoginForm = () => {
       if (res.status === 200) {
         const message = res.data.message
         ToasterNotif('success', `${message && 'Successfully Logged In!'} `, '#16a34a')
+          // setAuth(res.token, res.user)
+          console.log(res, " <<< ")
       }
-  
 
     } catch (error: unknown) {
       if (error && typeof error === 'object' && 'isAxiosError' in error) {

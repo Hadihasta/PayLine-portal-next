@@ -37,7 +37,6 @@ export async function registerAccount(payload: RegisterPayload) {
     const res = await axios.post('/auth/register', payload)
     return res.data
   } catch (err ) {
-
     throw err 
   }
 }
