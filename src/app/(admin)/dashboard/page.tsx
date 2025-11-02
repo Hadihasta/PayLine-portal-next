@@ -2,12 +2,15 @@
 import { getStoreByUserId } from '@/services/storeService'
 import React, { useEffect, useState } from 'react'
 import { useAuthStore } from '@/store/authStore'
+import clsx from 'clsx'
 
 const Page = () => {
   const [isHydrated, setIsHydrated] = useState(false)
   const [store, setStore] = useState([])
   // destructure useAuthStore
   const { token, user } = useAuthStore()
+ const [email, setEmail] = useState('')
+
 
   // tahap 1 useEffect (pastikan rehydrate succes dan restore zustand)
   useEffect(() => {
@@ -69,6 +72,31 @@ const Page = () => {
       </> :
       <>
         <div className="flex justify-center font-bold text-greenPrimary">Give Your Store Name</div>
+        <div className="relative">
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className={clsx(
+                  'peer w-full border rounded-lg px-4 pt-5 pb-2 text-sm outline-none transition-all',
+                  'border-gray-300 focus:border-BlueSecondary focus:ring-1 focus:ring-BlueSecondary'
+                )}
+                placeholder=" "
+              />
+              <label
+                htmlFor="email"
+                className={clsx(
+                  'absolute left-3 bg-white px-1 text-xs transition-all duration-200',
+                  email
+                    ? '-top-2 left-3 text-[11px] text-BlueSecondary'
+                    : 'top-3.5 text-PlaceHolderGrey text-sm peer-placeholder-shown:translate-y-1',
+                  'peer-focus:-top-2 peer-focus:left-3 peer-focus:text-[11px] peer-focus:text-BlueSecondary'
+                )}
+              >
+                Your Email / Username
+              </label>
+            </div>
       </>
       }
     </div>
