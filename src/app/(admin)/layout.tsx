@@ -19,7 +19,7 @@ export default function RootLayout({
     <>
       <SidebarProvider defaultOpen={false}>
         <SidebarApp />
-        <SidebarTriggerOut />
+        {/* <SidebarTriggerOut /> */}
         <div className='flex flex-col grow'>
         <Navbar label={`Payline`} />
         <main className={`${nunito.variable} antialiased grow`}>{children}</main>
