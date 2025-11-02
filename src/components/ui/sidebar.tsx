@@ -3,7 +3,7 @@ import Image from 'next/image'
 import * as React from 'react'
 import { Slot } from '@radix-ui/react-slot'
 import { cva, type VariantProps } from 'class-variance-authority'
-import { PanelLeftIcon ,SquareChevronRight} from 'lucide-react'
+import { PanelLeftIcon ,SquareChevronRight ,} from 'lucide-react'
 
 import { useIsMobile } from '@/hooks/use-mobile'
 import { cn } from '@/lib/utils'
@@ -271,21 +271,21 @@ function SidebarTriggerOut({ className, onClick, ...props }: React.ComponentProp
   const { toggleSidebar } = useSidebar()
 
   return (
-    <Button
+    <button
       data-sidebar="trigger"
       data-slot="sidebar-trigger"
       variant="ghost"
-      size="icon"
-      className={cn('size-7', className)}
+      
+      className={cn('size-7  w-10 h-10 cursor-pointer flex  items-center justify-center min-h-[6vh] ', className)}
       onClick={(event) => {
         onClick?.(event)
         toggleSidebar()
       }}
       {...props}
     >
-    <SquareChevronRight />
+<SquareChevronRight size={30} color='#01959f' />
       <span className="sr-only">Toggle Sidebar</span>
-    </Button>
+    </button>
   )
 }
 

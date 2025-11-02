@@ -1,11 +1,9 @@
 import React from 'react'
 
-
-
 const page = () => {
   return (
-    <div>
-      PAGE FOR DASHBOAR ADMIN 
+    <div className='flex justify-center items-center grow'>
+   Create Table List for your store 
     </div>
   )
 }

@@ -1,6 +1,6 @@
 import { Nunito } from 'next/font/google'
 import '@/style/globals.css'
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
+import { SidebarProvider, SidebarTrigger, SidebarTriggerOut } from '@/components/ui/sidebar'
 import SidebarApp from '@/components/global/SidebarApp'
 import Navbar from '@/components/global/Navbar'
 
@@ -17,11 +17,14 @@ export default function RootLayout({
 }>) {
   return (
     <>
-      <Navbar label={`Payline`} />
-      <SidebarProvider>
+      <SidebarProvider defaultOpen={false}>
         <SidebarApp />
-        <SidebarTrigger />
-        <main className={`${nunito.variable} antialiased `}>{children}</main>
+        <SidebarTriggerOut />
+        <div className='flex flex-col grow'>
+        <Navbar label={`Payline`} />
+        <main className={`${nunito.variable} antialiased grow`}>{children}</main>
+
+        </div>
       </SidebarProvider>
     </>
   )

@@ -54,7 +54,6 @@ const Navbar = ({ label, src }: NavbarProps) => {
  <>
       <div className="flex justify-between items-center h-[6vh] w-full border border-greyBorder bg-white px-4">
         <div className="font-bold text-xl">{label}</div>
-
         <div className="w-8 h-8 rounded-full overflow-hidden border border-gray-300">
           <Image
             src={src ? src : './asset/Template/Avatar.svg'}
