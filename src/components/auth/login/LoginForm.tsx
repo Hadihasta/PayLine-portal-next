@@ -37,7 +37,7 @@ function stateReducer(state: LoginForm, action: Action): LoginForm {
 const LoginForm = () => {
   const [state, dispatch] = useReducer(stateReducer, initialState)
 
-    // Zustand
+  // Zustand
   const setAuth = useAuthStore((state) => state.setAuth)
 
   const router = useRouter()
@@ -65,16 +65,23 @@ const LoginForm = () => {
       if (res.status === 200) {
         const message = res.data.message
         ToasterNotif('success', `${message && 'Successfully Logged In!'} `, '#16a34a')
-          // setAuth(res.token, res.user)
-          console.log(res, " <<< ")
+        const response =  res.data
+        // console.log(response)
+        // role masih belum menentukan mau di push kemana need improvement
+        setAuth(response.token, response.user)
+            router.push('/dashboard')
       }
-
     } catch (error: unknown) {
       if (error && typeof error === 'object' && 'isAxiosError' in error) {
         const err = error as AxiosError<ErrorResponse>
         if (err.response?.status === 401) {
           // console.log(err)
           ToasterNotif('warning', `${err.response?.data?.error} `, '#dc2626')
+        }
+        if (err.response?.status === 401) {
+          ToasterNotif('warning', `${err.response?.data?.error} `, '#dc2626')
+        } else {
+          ToasterNotif('warning', `something goes wrong... `, '#dc2626')
         }
       }
     }

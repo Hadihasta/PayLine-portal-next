@@ -32,7 +32,7 @@ export const useAuthStore = create<AuthState>()(
     {
       name: 'auth-storage',
       onRehydrateStorage: () => (state) => {
-        // console.log("rehydrated dari localStorage:", state)
+        console.log("rehydrated dari localStorage:", state)
       },
     }
   )

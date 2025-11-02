@@ -8,7 +8,7 @@ export async function POST(req: Request) {
     const { username, password } = await req.json()
 
     if (!username || !password) {
-      return Response.json({ error: 'Missing required fields' }, { status: 400 })
+      return Response.json({ error: 'Please Input Username and Password' }, { status: 400 })
     }
 
     const existingUser = await prisma.auth.findUnique({
@@ -46,14 +46,15 @@ export async function POST(req: Request) {
     return Response.json(
       {
         message: 'Login successful',
-        data: {
+        user: {
           id: serializeBigInt(existingUser.user_id),
           username: existingUser.username,
           email: existingUser.user?.email,
           role: existingUser.user?.role?.role_name,
           role_status,
-          token,
+       
         },
+           token,
       },
       { status: 200 }
     )

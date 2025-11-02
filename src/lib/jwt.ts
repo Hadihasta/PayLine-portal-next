@@ -9,7 +9,7 @@ const publicKey = fs.readFileSync(path.join(process.cwd(), 'src/lib/keys/public.
 export function signToken(payload: object) {
   return jwt.sign(payload, privateKey, {
     algorithm: 'ES256',
-    expiresIn: '10h',
+    expiresIn: '24h',
   })
 }
 
