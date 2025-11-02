@@ -33,7 +33,6 @@ export async function POST(req: Request) {
     const role = existingUser.user?.role?.role_name || null
     const role_status = !role ? 'Permission needs to be confirmed by admin' : null
 
-    console.log(existingUser.user?.role?.role_name)
     return Response.json(
       {
         message: 'Login successful',

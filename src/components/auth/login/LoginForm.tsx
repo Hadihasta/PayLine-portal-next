@@ -1,5 +1,5 @@
 'use client'
-import Button from '@/component/global/Button'
+import Button from '@/components/global/Button'
 import { useRouter } from 'next/navigation'
 import { useReducer, ChangeEvent } from 'react'
 import { login } from '@/services/authservice'

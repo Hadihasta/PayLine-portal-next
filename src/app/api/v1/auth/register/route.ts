@@ -45,7 +45,6 @@ export async function POST(req: Request) {
       },
     })
 
-    console.log(name, email, phone_number, username, password)
     return Response.json(
       {
         message: "Account created successfully",
