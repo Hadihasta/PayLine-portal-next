@@ -3,6 +3,9 @@ import Button from '@/components/global/Button'
 import { useRouter } from 'next/navigation'
 import { useReducer, ChangeEvent } from 'react'
 import { login } from '@/services/authservice'
+import { ToasterNotif } from '@/components/global/ToasterNotif'
+import { AxiosError } from 'axios'
+import { ErrorResponse } from '@/services/authservice'
 
 interface LoginForm {
   username: string
@@ -53,12 +56,23 @@ const LoginForm = () => {
   }
 
   const handleSubmit = async () => {
-   try {
-     const res = await login(state)
-    console.log('fetch', res)
-   } catch (error) {
-    console.log(error, " <<<< ")
-   }
+    try {
+      const res = await login(state)
+      if (res.status === 200) {
+        const message = res.data.message
+        ToasterNotif('success', `${message && 'Successfully Logged In!'} `, '#16a34a')
+      }
+  
+
+    } catch (error: unknown) {
+      if (error && typeof error === 'object' && 'isAxiosError' in error) {
+        const err = error as AxiosError<ErrorResponse>
+        if (err.response?.status === 401) {
+          // console.log(err)
+          ToasterNotif('warning', `${err.response?.data?.error} `, '#dc2626')
+        }
+      }
+    }
   }
 
   return (
@@ -83,12 +97,12 @@ const LoginForm = () => {
         >
           <div className="flex flex-col gap-3 ">
             <span className="text-xs">
-              Alamat email <span className="text-red-700 text-xs">*</span>
+              Username<span className="text-red-700 text-xs">*</span>
             </span>
             <input
               type="email"
               className="input-field"
-              placeholder="Masukan email"
+              placeholder="Masukan Username"
               value={state.username}
               onChange={(e) => changeHandler('username', e)}
             />

@@ -11,7 +11,7 @@ export async function login(payload: LoginPayload) {
     const res = await axios.post('/auth/login', payload)
     return res
   } catch (err) {
-    console.error('Login gagal:', err)
+    // console.error('Login gagal:', err)
     throw err
   }
 }
@@ -23,6 +23,12 @@ interface RegisterPayload {
   phone_number: string
   username: string
   password: string
+}
+
+
+export interface ErrorResponse {
+  error: string
+  message?: string
 }
 
 
