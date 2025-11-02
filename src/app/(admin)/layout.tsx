@@ -1,6 +1,6 @@
 import { Nunito } from 'next/font/google'
 import '@/style/globals.css'
-import { SidebarProvider, SidebarTrigger, SidebarTriggerOut } from '@/components/ui/sidebar'
+import { SidebarProvider,  SidebarTriggerOut } from '@/components/ui/sidebar'
 import SidebarApp from '@/components/global/SidebarApp'
 import Navbar from '@/components/global/Navbar'
 

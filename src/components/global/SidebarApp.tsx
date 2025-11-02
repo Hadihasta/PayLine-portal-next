@@ -1,4 +1,5 @@
 import { Calendar, Home, Inbox, Search, Settings } from 'lucide-react'
+
 import {
   Sidebar,
   SidebarContent,
@@ -16,36 +17,35 @@ const items = [
     url: '#',
     icon: Home,
   },
-  {
-    title: 'Inbox',
-    url: '#',
-    icon: Inbox,
-  },
-  {
-    title: 'Calendar',
-    url: '#',
-    icon: Calendar,
-  },
-  {
-    title: 'Search',
-    url: '#',
-    icon: Search,
-  },
-  {
-    title: 'Settings',
-    url: '#',
-    icon: Settings,
-  },
+  // {
+  //   title: 'Inbox',
+  //   url: '#',
+  //   icon: Inbox,
+  // },
+  // {
+  //   title: 'Calendar',
+  //   url: '#',
+  //   icon: Calendar,
+  // },
+  // {
+  //   title: 'Search',
+  //   url: '#',
+  //   icon: Search,
+  // },
+  // {
+  //   title: 'Settings',
+  //   url: '#',
+  //   icon: Settings,
+  // },
 ]
 
 const SidebarApp = () => {
   return (
       <Sidebar variant="sidebar">
       <SidebarContent>
-        <SidebarGroup>
+        <SidebarGroup className='px-5 '>
           <div className="flex justify-between items-center">
-            <div>PAYLINE APP</div>
-            {/* <SidebarTrigger /> */}
+            <div className='font-bold text-greenPrimary'>PAYLINE APP</div>
           </div>
           {/* <SidebarGroupLabel>Application</SidebarGroupLabel> */}
           <SidebarGroupContent>

@@ -1,5 +1,5 @@
 'use client'
-import Image from 'next/image'
+
 import * as React from 'react'
 import { Slot } from '@radix-ui/react-slot'
 import { cva, type VariantProps } from 'class-variance-authority'
@@ -254,13 +254,6 @@ function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<t
       {...props}
     >
       <PanelLeftIcon />
-      {/* <Image
-        src={'./icon/menu-arrow.svg'}
-        alt="profile-placeholder"
-        width={32}
-        height={32}
-        //   className="object-cover"
-      /> */}
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
   )
