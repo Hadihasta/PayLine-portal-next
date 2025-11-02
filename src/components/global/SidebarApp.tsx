@@ -45,9 +45,10 @@ const SidebarApp = () => {
       <SidebarContent>
         <SidebarGroup className='px-5 '>
           <div className="flex justify-between items-center">
+               {/* <SidebarGroupLabel>Application</SidebarGroupLabel> */}
             <div className='font-bold text-greenPrimary'>PAYLINE APP</div>
           </div>
-          {/* <SidebarGroupLabel>Application</SidebarGroupLabel> */}
+       
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
