@@ -16,12 +16,13 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <SidebarProvider>
-      {' '}
-      <Navbar />
-      <SidebarApp />
-      <main className={`${nunito.variable} antialiased`}>{children}</main>
-      {/* <SidebarTrigger /> */}
-    </SidebarProvider>
+    <>
+      <Navbar label={`Payline`} />
+      <SidebarProvider>
+        <SidebarApp />
+        <SidebarTrigger />
+        <main className={`${nunito.variable} antialiased `}>{children}</main>
+      </SidebarProvider>
+    </>
   )
 }

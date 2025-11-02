@@ -40,10 +40,14 @@ const items = [
 
 const SidebarApp = () => {
   return (
-    <Sidebar>
+      <Sidebar variant="sidebar">
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <div className="flex justify-between items-center">
+            <div>PAYLINE APP</div>
+            {/* <SidebarTrigger /> */}
+          </div>
+          {/* <SidebarGroupLabel>Application</SidebarGroupLabel> */}
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
