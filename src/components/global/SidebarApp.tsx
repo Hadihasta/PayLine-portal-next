@@ -14,14 +14,14 @@ import {
 const items = [
   {
     title: 'Store',
-    url: '#',
+    url: '/dashboard',
     icon: Home,
   },
-  // {
-  //   title: 'Inbox',
-  //   url: '#',
-  //   icon: Inbox,
-  // },
+  {
+    title: 'Manage Menu',
+    url: '/manage-menu',
+    icon: Inbox,
+  },
   // {
   //   title: 'Calendar',
   //   url: '#',
