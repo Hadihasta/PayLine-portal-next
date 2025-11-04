@@ -33,7 +33,7 @@ export const useAuthStore = create<AuthState>()(
       // simpan di local storage dengan nama yang unique auth storage
       name: 'auth-storage',
       onRehydrateStorage: () => (state) => {
-        console.log("rehydrated dari localStorage:", state)
+        // console.log("rehydrated dari localStorage:", state)
       },
     }
   )
