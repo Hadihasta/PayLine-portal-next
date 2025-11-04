@@ -1,11 +1,13 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { serializeBigInt } from '@/lib/serializeBigIntToString'
 
 // uset id need to be string
 export async function GET(req: Request, context: { params: Promise<{ userId: string }> }) {
   try {
     // Harus di-await di Next.js 15+
     const { userId } = await context.params
+    console.log(userId, " <,, ")
 
     const stores = await prisma.store.findMany({
       where: {
@@ -30,7 +32,7 @@ export async function GET(req: Request, context: { params: Promise<{ userId: str
       },
     })
 
-    return NextResponse.json({ success: true, data: stores })
+    return NextResponse.json({ success: true, data: serializeBigInt(stores) })
   } catch (error) {
     console.error('error get store', error)
     return NextResponse.json({ success: false, message: 'Failed to get store' }, { status: 500 })

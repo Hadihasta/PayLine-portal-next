@@ -21,7 +21,7 @@ interface CreateStoreProps {
 
 export async function createStore(payload: CreateStoreProps){
   try {
-    const res = await axios.post(`store/getby/`, payload)
+    const res = await axios.post(`store/create/`, payload)
     return res
   } catch (err) {
     // console.error('getStoreByUserId gagal:', err)
