@@ -1,8 +1,8 @@
 import React from 'react'
-
+import MenuPage from '@/components/manage-menu/MenuPage'
 const Page = () => {
   return (
-    <div>Page</div>
+    <><MenuPage/></>
   )
 }
 
