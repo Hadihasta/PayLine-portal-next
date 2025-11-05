@@ -11,7 +11,7 @@ export async function login(payload: LoginPayload) {
     const res = await axios.post('/auth/login', payload)
     return res
   } catch (err) {
-    console.error('Login gagal:', err)
+    // console.error('Login gagal:', err)
     throw err
   }
 }
@@ -26,12 +26,17 @@ interface RegisterPayload {
 }
 
 
+export interface ErrorResponse {
+  error: string
+  message?: string
+}
+
+
 export async function registerAccount(payload: RegisterPayload) {
   try {
     const res = await axios.post('/auth/register', payload)
     return res.data
   } catch (err ) {
-
     throw err 
   }
 }

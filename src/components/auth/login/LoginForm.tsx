@@ -3,6 +3,10 @@ import Button from '@/components/global/Button'
 import { useRouter } from 'next/navigation'
 import { useReducer, ChangeEvent } from 'react'
 import { login } from '@/services/authservice'
+import { ToasterNotif } from '@/components/global/ToasterNotif'
+import { AxiosError } from 'axios'
+import { ErrorResponse } from '@/services/authservice'
+import { useAuthStore } from '@/store/authStore'
 
 interface LoginForm {
   username: string
@@ -33,6 +37,9 @@ function stateReducer(state: LoginForm, action: Action): LoginForm {
 const LoginForm = () => {
   const [state, dispatch] = useReducer(stateReducer, initialState)
 
+  // Zustand
+  const setAuth = useAuthStore((state) => state.setAuth)
+
   const router = useRouter()
 
   const redirectPageHandler = () => {
@@ -53,12 +60,31 @@ const LoginForm = () => {
   }
 
   const handleSubmit = async () => {
-   try {
-     const res = await login(state)
-    console.log('fetch', res)
-   } catch (error) {
-    console.log(error, " <<<< ")
-   }
+    try {
+      const res = await login(state)
+      if (res.status === 200) {
+        const message = res.data.message
+        ToasterNotif('success', `${message && 'Successfully Logged In!'} `, '#16a34a')
+        const response =  res.data
+        // console.log(response)
+        // role masih belum menentukan mau di push kemana need improvement
+        setAuth(response.token, response.user)
+            router.push('/dashboard')
+      }
+    } catch (error: unknown) {
+      if (error && typeof error === 'object' && 'isAxiosError' in error) {
+        const err = error as AxiosError<ErrorResponse>
+        if (err.response?.status === 401) {
+          // console.log(err)
+          ToasterNotif('warning', `${err.response?.data?.error} `, '#dc2626')
+        }
+        if (err.response?.status === 401) {
+          ToasterNotif('warning', `${err.response?.data?.error} `, '#dc2626')
+        } else {
+          ToasterNotif('warning', `something goes wrong... `, '#dc2626')
+        }
+      }
+    }
   }
 
   return (
@@ -83,12 +109,12 @@ const LoginForm = () => {
         >
           <div className="flex flex-col gap-3 ">
             <span className="text-xs">
-              Alamat email <span className="text-red-700 text-xs">*</span>
+              Username<span className="text-red-700 text-xs">*</span>
             </span>
             <input
               type="email"
               className="input-field"
-              placeholder="Masukan email"
+              placeholder="Masukan Username"
               value={state.username}
               onChange={(e) => changeHandler('username', e)}
             />

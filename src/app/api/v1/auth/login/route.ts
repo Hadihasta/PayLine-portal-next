@@ -1,13 +1,14 @@
 import { prisma } from '@/lib/prisma'
 import { comparePassword } from '@/lib/bcrypt'
 import { serializeBigInt } from '@/lib/serializeBigIntToString'
+import { signToken } from '@/lib/jwt'
 
 export async function POST(req: Request) {
   try {
     const { username, password } = await req.json()
 
     if (!username || !password) {
-      return Response.json({ error: 'Missing required fields' }, { status: 400 })
+      return Response.json({ error: 'Please Input Username and Password' }, { status: 400 })
     }
 
     const existingUser = await prisma.auth.findUnique({
@@ -33,16 +34,27 @@ export async function POST(req: Request) {
     const role = existingUser.user?.role?.role_name || null
     const role_status = !role ? 'Permission needs to be confirmed by admin' : null
 
+    const payload = {
+      id: serializeBigInt(existingUser.user_id),
+      username: existingUser.username,
+      email: existingUser.user?.email,
+      password: password,
+    }
+
+    const token = signToken(payload)
+
     return Response.json(
       {
         message: 'Login successful',
-        data: {
+        user: {
           id: serializeBigInt(existingUser.user_id),
           username: existingUser.username,
           email: existingUser.user?.email,
           role: existingUser.user?.role?.role_name,
           role_status,
+       
         },
+           token,
       },
       { status: 200 }
     )
