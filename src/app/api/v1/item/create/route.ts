@@ -1,51 +1,65 @@
 import { NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma' 
-import { serializeBigInt } from '@/lib/serializeBigIntToString'
+
+import { createClient } from '@supabase/supabase-js'
+
+export const supabase = createClient(
+  process.env.SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+)
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json()
-    const { menu_id, name, price, category, is_active } = body
+    const formData = await req.formData()
+    const file = formData.get('file') as File | null
 
-    // 🧩 Validasi input
-    if (!menu_id || !name || !price) {
+    if (!file) {
       return NextResponse.json(
-        { message: 'menu_id, name, dan price wajib diisi' },
+        { message: 'File tidak ditemukan' },
         { status: 400 }
       )
     }
 
-    // 🧩 Pastikan menu yang direferensikan ada
-    const menu = await prisma.menu.findUnique({
-      where: { id: BigInt(menu_id) },
-    })
+    // 🔹 Buat nama file unik agar tidak menimpa file lain
+    const ext = file.name.split('.').pop()
+    const fileName = `item-${Date.now()}.${ext}`
 
-    if (!menu) {
+    // 🔹 Upload ke Supabase Storage
+    const { data, error } = await supabase.storage
+      .from(process.env.SUPABASE_BUCKET!)
+      .upload(fileName, file, {
+        cacheControl: '3600',
+        upsert: false,
+        contentType: file.type,
+      })
+
+    if (error) {
+      console.error('Supabase upload error:', error)
       return NextResponse.json(
-        { message: 'Menu tidak ditemukan' },
-        { status: 404 }
+        { message: 'Gagal upload ke Supabase', error: error.message },
+        { status: 500 }
       )
     }
 
-    // 🧩 Buat item baru
-    const newItem = await prisma.item.create({
-      data: {
-        name,
-        price: BigInt(price),
-        category: category ?? null,
-        is_active: is_active ?? true,
-        menu_id: BigInt(menu_id),
-      },
-    })
+    // 🔹 Ambil public URL-nya
+    const { data: publicUrlData } = supabase.storage
+      .from(process.env.SUPABASE_BUCKET!)
+      .getPublicUrl(data.path)
 
     return NextResponse.json(
-      { message: 'Item berhasil dibuat', data: serializeBigInt(newItem) },
-      { status: 201 }
+      {
+        message: 'Upload berhasil',
+        url: publicUrlData.publicUrl,
+        path: data.path,
+      },
+      { status: 200 }
     )
-  } catch  (error) {
-    console.error('Error create item:', error)
+  } catch (error) {
+    console.error('Error upload:', error)
     return NextResponse.json(
-      { message: 'Terjadi kesalahan server' },
+      {
+        message: 'Terjadi kesalahan server',
+        error: (error as Error).message,
+      },
       { status: 500 }
     )
   }
