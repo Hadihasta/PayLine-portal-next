@@ -109,7 +109,7 @@ const Page = () => {
         </>
       ) : (
         <>
-          <div className="flex justify-center font-bold text-greenPrimary">Create Table List for your store </div>
+            <div className="flex justify-center font-bold text-greenPrimary">Give Your Store Name</div>
 
           <div className="mt-3">
             <div className="border rounded-md shadow-sm overflow-hidden">

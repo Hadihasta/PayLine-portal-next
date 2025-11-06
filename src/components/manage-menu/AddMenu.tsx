@@ -1,0 +1,113 @@
+'use client'
+
+import React, { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Switch } from '@/components/ui/switch'
+
+const AddMenu = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    price: '',
+    category: '',
+    is_active: true,
+    image: null as File | null,
+  })
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setFormData(prev => ({ ...prev, [name]: value }))
+  }
+
+  const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null
+    setFormData(prev => ({ ...prev, image: file }))
+  }
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    console.log('Form data siap dikirim:', formData)
+    // TODO: panggil API create menu di sini (misal ke /api/menus)
+  }
+
+  return (
+    <div className="p-6 grid grid-cols-3">
+      <Card className="max-w-lg mx-auto shadow-md rounded-2xl ">
+        <CardHeader>
+          <CardTitle className="text-xl font-semibold">Add New Menu</CardTitle>
+        </CardHeader>
+
+        <CardContent>
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <div>
+              <Label htmlFor="name">Menu Name</Label>
+              <Input
+                id="name"
+                name="name"
+                placeholder="e.g., Fried Rice"
+                value={formData.name}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="price">Price</Label>
+              <Input
+                id="price"
+                name="price"
+                type="number"
+                placeholder="e.g., 25000"
+                value={formData.price}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="category">Category</Label>
+              <Input
+                id="category"
+                name="category"
+                placeholder="e.g., Main Dish"
+                value={formData.category}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="image">Upload Image</Label>
+              <Input
+                id="image"
+                name="image"
+                type="file"
+                accept="image/*"
+                onChange={handleImage}
+              />
+            </div>
+
+            <div className="flex items-center justify-between">
+              <Label htmlFor="is_active">Available</Label>
+              <Switch
+                id="is_active"
+                checked={formData.is_active}
+                onCheckedChange={checked =>
+                  setFormData(prev => ({ ...prev, is_active: checked }))
+                }
+              />
+            </div>
+
+            <Button type="submit" className="w-full mt-4">
+              Add to Menu
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+
+    </div>
+  )
+}
+
+export default AddMenu
