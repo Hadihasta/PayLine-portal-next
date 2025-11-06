@@ -27,6 +27,7 @@ const MenuPage = () => {
       console.log('User belum login, atau persist belum ada data')
     }
     const getMenu = async () => {
+      // create / get menu 
       const InitMenu = await getAndCreateMenu(Number(user?.id))
       console.log(InitMenu)
     }

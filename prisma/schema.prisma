@@ -143,6 +143,7 @@ model Item {
   menu_id     BigInt
   name        String
   price       BigInt
+  image_url   String?    
   category    String?
   is_active   Boolean    @default(true)
   created_at  DateTime   @default(now())

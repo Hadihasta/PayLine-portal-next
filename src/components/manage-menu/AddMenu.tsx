@@ -33,8 +33,8 @@ const AddMenu = () => {
   }
 
   return (
-    <div className="p-6">
-      <Card className="max-w-lg mx-auto shadow-md rounded-2xl">
+    <div className="p-6 grid grid-cols-3">
+      <Card className="max-w-lg mx-auto shadow-md rounded-2xl ">
         <CardHeader>
           <CardTitle className="text-xl font-semibold">Add New Menu</CardTitle>
         </CardHeader>
@@ -100,11 +100,12 @@ const AddMenu = () => {
             </div>
 
             <Button type="submit" className="w-full mt-4">
-              Save Menu
+              Add to Menu
             </Button>
           </form>
         </CardContent>
       </Card>
+
     </div>
   )
 }
