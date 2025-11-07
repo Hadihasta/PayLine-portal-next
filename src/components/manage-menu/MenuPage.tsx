@@ -40,7 +40,10 @@ const MenuPage = () => {
         // get item
         const getItemExist = async () => {
           const res = await getItemByMenuId(menuId)
+          
+          console.log(res)
           setItem(res.data)
+
         }
         getItemExist()
       }
