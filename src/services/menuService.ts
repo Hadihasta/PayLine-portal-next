@@ -8,7 +8,7 @@ export async function getAndCreateMenu(id: number) {
         store_id : id
     }
     const res = await axios.post(`menu/create/`, payload)
-    return res
+    return res.data
   } catch (err) {
     // console.error('getStoreByUserId gagal:', err)
     throw err

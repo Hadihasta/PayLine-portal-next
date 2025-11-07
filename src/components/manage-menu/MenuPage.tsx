@@ -1,9 +1,10 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { getAndCreateMenu } from '@/services/menuService'
 import { useAuthStore } from '@/store/authStore'
 import { useRouter } from 'next/navigation'
 import AddMenu from './AddMenu'
+import { getAndCreateMenu } from '@/services/menuService'
+import { getItemByMenuId } from '@/services/itemService'
 
 const MenuPage = () => {
   const { user } = useAuthStore()
@@ -27,18 +28,30 @@ const MenuPage = () => {
       console.log('User belum login, atau persist belum ada data')
     }
     const getMenu = async () => {
-      // create / get menu 
+      // create / get menu
       const InitMenu = await getAndCreateMenu(Number(user?.id))
       console.log(InitMenu)
+
+      if (InitMenu) {
+        const menuId = Number(InitMenu?.data.id)
+        // get item
+        const getItemExist = async () => {
+          const res = await getItemByMenuId(menuId)
+          console.log(res, ' <<< item')
+        }
+        getItemExist()
+      }
     }
     getMenu()
   }, [isHydrated, user])
   //   jalankan setiap ishydrated dan user berubah
 
-  return <div>
+  return (
+    <div>
       <div className="flex justify-center font-bold text-greenPrimary mt-3">Add Item To the Menu</div>
-    <AddMenu/>
-  </div>
+      <AddMenu />
+    </div>
+  )
 }
 
 export default MenuPage
