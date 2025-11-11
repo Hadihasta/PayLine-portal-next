@@ -6,11 +6,12 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Switch } from '@/components/ui/switch'
+import { postItemCreate } from '@/services/itemService'
 
 const AddMenu = () => {
   const [formData, setFormData] = useState({
     name: '',
-    price: '',
+    price: 0,
     category: '',
     is_active: true,
     image: null as File | null,
@@ -18,6 +19,7 @@ const AddMenu = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
+    console.log(name, value)
     setFormData(prev => ({ ...prev, [name]: value }))
   }
 
@@ -28,8 +30,10 @@ const AddMenu = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('Form data siap dikirim:', formData)
+    // console.log('Form data siap dikirim:', formData)
+   const res =  postItemCreate(formData)
     // TODO: panggil API create menu di sini (misal ke /api/menus)
+    // jangan lupa reset form
   }
 
   return (

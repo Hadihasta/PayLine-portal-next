@@ -7,8 +7,6 @@ export async function GET(req: Request, context: { params: Promise<{ userId: str
   try {
     // Harus di-await di Next.js 15+
     const { userId } = await context.params
-    console.log(userId, " <,, ")
-
     const stores = await prisma.store.findMany({
       where: {
         usersStores: {
