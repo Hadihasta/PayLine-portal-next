@@ -56,7 +56,7 @@ const MenuPage = () => {
     <div className="p-6">
       <div className="flex justify-center font-bold text-greenPrimary mt-3">Add Item To the Menu</div>
       <div className="grid grid-cols-3 gap-4">
-        <AddMenu />
+        <AddMenu item={item}/>
         {item.map((menu) => (
           <ListMenu
             key={menu.id}

@@ -1,48 +1,64 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Switch } from '@/components/ui/switch'
 import { postItemCreate } from '@/services/itemService'
+import { ListMenuProps } from './ListMenu'
 
-const AddMenu = () => {
+
+
+interface AddMenuProps {
+  item: ListMenuProps[]
+}
+
+const AddMenu= ({ item }: AddMenuProps)  => {
+
+
   const [formData, setFormData] = useState({
+    menu_id: 0,
     name: '',
     price: 0,
     category: '',
     is_active: true,
-    image: null as File | null,
+    file: null as File | null,
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    console.log(name, value)
     setFormData(prev => ({ ...prev, [name]: value }))
   }
 
   const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null
-    setFormData(prev => ({ ...prev, image: file }))
+ 
+    setFormData(prev => ({ ...prev, file: file }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // console.log('Form data siap dikirim:', formData)
-   const res =  postItemCreate(formData)
+  const handleSubmit = async(e: React.FormEvent) => {
+
+    try {
+        //  console.log('Form data siap dikirim:', formData)
+   const res = await postItemCreate(formData)
+   console.log(res , " <<<< ")
     // TODO: panggil API create menu di sini (misal ke /api/menus)
     // jangan lupa reset form
+    } catch (error) {
+      console.log(error)
+    }
+ 
   }
 
   return (
     <div className="">
+      {JSON.stringify(item)}
       <Card className="max-w-lg mx-auto shadow-md rounded-2xl ">
         <CardHeader>
           <CardTitle className="text-xl font-semibold">Add New Menu</CardTitle>
         </CardHeader>
-
         <CardContent>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div>
@@ -82,7 +98,7 @@ const AddMenu = () => {
             </div>
 
             <div>
-              <Label htmlFor="image">Upload Image</Label>
+              <Label htmlFor="file">Upload Image</Label>
               <Input
                 id="image"
                 name="image"

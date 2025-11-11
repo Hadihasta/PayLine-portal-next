@@ -18,15 +18,15 @@ interface itemCreateProps {
   price : number
   category : string 
   is_active : boolean
-  image:  File | null
+  file:  File | null
 
 }
 
 export async function postItemCreate(payload : itemCreateProps) {
   try {
-       console.log(payload , " <<<")
-    // const res = await axios.post(`item/create`)
-    // return res
+      //  console.log(payload , " <<<")
+    const res = await axios.post(`item/create`, payload)
+    return res
   } catch (err) {
     // console.error('getStoreByUserId gagal:', err)
     throw err
