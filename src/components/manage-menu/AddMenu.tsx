@@ -33,7 +33,7 @@ const AddMenu = () => {
   }
 
   return (
-    <div className="p-6 grid grid-cols-3">
+    <div className="">
       <Card className="max-w-lg mx-auto shadow-md rounded-2xl ">
         <CardHeader>
           <CardTitle className="text-xl font-semibold">Add New Menu</CardTitle>
