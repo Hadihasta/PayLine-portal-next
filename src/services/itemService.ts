@@ -13,23 +13,19 @@ export async function getItemByMenuId(id: number) {
 }
 
 
-interface itemCreateProps {
-  name : string
-  price : number
-  category : string 
-  is_active : boolean
-  file:  File | null
 
-}
 
-export async function postItemCreate(payload : itemCreateProps) {
+export async function postItemCreate(formData: FormData) {
   try {
-      //  console.log(payload , " <<<")
-    const res = await axios.post(`item/create`, payload)
-    return res
+    const res = await axios.post("item/create", formData, {
+      // headers: {
+      //      Authorization: `Bearer ${token}`,
+      // },
+    });
+    return res.data;
   } catch (err) {
-    // console.error('getStoreByUserId gagal:', err)
-    throw err
+    console.error("Error create item:", err);
+    throw err;
   }
 }
 

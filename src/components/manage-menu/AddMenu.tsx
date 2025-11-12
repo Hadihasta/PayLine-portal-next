@@ -15,20 +15,28 @@ export interface AddMenuProps {
 }
 
 
-const AddMenu: React.FC<AddMenuProps> = ({ data }) => {
-  // useEffect(()=> {
-  //   const getMenuId = async() => {
-  //     try {
-  //         const res = await getMenuByUserId()
-  //     } catch (error) {
 
-  //     }
-  //   }
-  //   console.log('fetch to get menu id ')
-  // },[])
+const AddMenu: React.FC<AddMenuProps> = ({ data }) => {
+  const [menuId,setMenuId] = useState<number>(0)
+
+useEffect(() => {
+  const getMenuId = async () => {
+    if (!data?.id) return 
+    try {
+      const res = await getMenuByUserId(parseInt(data.id))
+      setMenuId(res.data.id)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  getMenuId()
+}, [data]) 
+
+
 
   const [formData, setFormData] = useState({
-    menu_id: 0,
+    menu_id: String(menuId) || "0",
     name: '',
     price: 0,
     category: '',
@@ -47,21 +55,44 @@ const AddMenu: React.FC<AddMenuProps> = ({ data }) => {
     setFormData((prev) => ({ ...prev, file: file }))
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    try {
-      //  console.log('Form data siap dikirim:', formData)
-      const res = await postItemCreate(formData)
-      console.log(res, ' <<<< ')
-      // TODO: panggil API create menu di sini (misal ke /api/menus)
-      // jangan lupa reset form
-    } catch (error) {
-      console.log(error)
-    }
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault() // cegah reload
+
+  if (!formData.file) {
+    console.error("File belum dipilih!")
+    return
   }
+
+  try {
+    // 🧩 Buat FormData
+    const fd = new FormData()
+    fd.append("menu_id", String(menuId))
+    fd.append("name", formData.name)
+    fd.append("price", String(formData.price))
+    fd.append("category", formData.category)
+    fd.append("is_active", String(formData.is_active))
+    fd.append("file", formData.file) 
+
+ 
+    const res = await postItemCreate(fd)
+    console.log("Item berhasil dikirim:", res)
+
+    // ✅ Reset form setelah sukses
+    setFormData({
+      menu_id: String(menuId) || "0",
+      name: "",
+      price: 0,
+      category: "",
+      is_active: true,
+      file: null,
+    })
+  } catch (error) {
+    console.error("Gagal upload item:", error)
+  }
+}
 
   return (
     <div className="">
-      {JSON.stringify(data)}
       <Card className="max-w-lg mx-auto shadow-md rounded-2xl ">
         <CardHeader>
           <CardTitle className="text-xl font-semibold">Add New Menu</CardTitle>

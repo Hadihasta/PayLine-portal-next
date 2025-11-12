@@ -10,7 +10,7 @@ export async function GET(
   try {
     const { userId } = await context.params
 
-    const menuIds = await prisma.menu.findMany({
+    const menuIds = await prisma.menu.findFirst({
       where: {
         store: {
           usersStores: {
