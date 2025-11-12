@@ -56,15 +56,17 @@ useEffect(() => {
   }
 
 const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault() // cegah reload
 
+  e.preventDefault() // cegah reload
+  // sementara refetch dulu setelah penambahan item nanti dapat menggunakan tanstack dan fetch ketika auto focus atau setelah penambahan
+  // bisa juga pakai web socket biar real time tapi di setup lewat backend
   if (!formData.file) {
     console.error("File belum dipilih!")
     return
   }
 
   try {
-    // 🧩 Buat FormData
+  
     const fd = new FormData()
     fd.append("menu_id", String(menuId))
     fd.append("name", formData.name)
@@ -77,7 +79,7 @@ const handleSubmit = async (e: React.FormEvent) => {
     const res = await postItemCreate(fd)
     console.log("Item berhasil dikirim:", res)
 
-    // ✅ Reset form setelah sukses
+    
     setFormData({
       menu_id: String(menuId) || "0",
       name: "",
@@ -86,6 +88,10 @@ const handleSubmit = async (e: React.FormEvent) => {
       is_active: true,
       file: null,
     })
+
+    if (res.status === 201) { 
+      location.reload()
+    }
   } catch (error) {
     console.error("Gagal upload item:", error)
   }
@@ -99,7 +105,7 @@ const handleSubmit = async (e: React.FormEvent) => {
         </CardHeader>
         <CardContent>
           <form
-            onSubmit={handleSubmit}
+            // onSubmit={handleSubmit}
             className="flex flex-col gap-4"
           >
             <div>
@@ -159,6 +165,7 @@ const handleSubmit = async (e: React.FormEvent) => {
             </div>
 
             <Button
+            onClick={handleSubmit}
               type="submit"
               className="w-full mt-4"
             >

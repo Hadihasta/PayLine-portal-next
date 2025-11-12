@@ -49,7 +49,7 @@ const MenuPage = () => {
       }
     }
     getMenu()
-  }, [isHydrated, user])
+  }, [isHydrated, user,])
   //   jalankan setiap ishydrated dan user berubah
 
   return (
