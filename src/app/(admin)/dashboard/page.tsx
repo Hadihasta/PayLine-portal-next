@@ -57,7 +57,7 @@ const Page = () => {
           name: storeName,
         }
         const res = await createStore(payload)
-        console.log(res)
+        // console.log(res)
         // setAuth(res.token, res.user)
         ToasterNotif('success', `Success Named Store As ${storeName}`, '#16a34a')
 

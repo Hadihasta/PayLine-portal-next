@@ -6,17 +6,26 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Switch } from '@/components/ui/switch'
+import { getMenuByUserId } from '@/services/menuService'
 import { postItemCreate } from '@/services/itemService'
-import { ListMenuProps } from './ListMenu'
+import { AuthUser } from '@/store/authStore'
 
-
-
-interface AddMenuProps {
-  item: ListMenuProps[]
+export interface AddMenuProps {
+  data: AuthUser | null
 }
 
-const AddMenu= ({ item }: AddMenuProps)  => {
 
+const AddMenu: React.FC<AddMenuProps> = ({ data }) => {
+  // useEffect(()=> {
+  //   const getMenuId = async() => {
+  //     try {
+  //         const res = await getMenuByUserId()
+  //     } catch (error) {
+
+  //     }
+  //   }
+  //   console.log('fetch to get menu id ')
+  // },[])
 
   const [formData, setFormData] = useState({
     menu_id: 0,
@@ -29,38 +38,39 @@ const AddMenu= ({ item }: AddMenuProps)  => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    setFormData(prev => ({ ...prev, [name]: value }))
+    setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
   const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null
- 
-    setFormData(prev => ({ ...prev, file: file }))
+
+    setFormData((prev) => ({ ...prev, file: file }))
   }
 
-  const handleSubmit = async(e: React.FormEvent) => {
-
+  const handleSubmit = async (e: React.FormEvent) => {
     try {
-        //  console.log('Form data siap dikirim:', formData)
-   const res = await postItemCreate(formData)
-   console.log(res , " <<<< ")
-    // TODO: panggil API create menu di sini (misal ke /api/menus)
-    // jangan lupa reset form
+      //  console.log('Form data siap dikirim:', formData)
+      const res = await postItemCreate(formData)
+      console.log(res, ' <<<< ')
+      // TODO: panggil API create menu di sini (misal ke /api/menus)
+      // jangan lupa reset form
     } catch (error) {
       console.log(error)
     }
- 
   }
 
   return (
     <div className="">
-      {JSON.stringify(item)}
+      {JSON.stringify(data)}
       <Card className="max-w-lg mx-auto shadow-md rounded-2xl ">
         <CardHeader>
           <CardTitle className="text-xl font-semibold">Add New Menu</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col gap-4"
+          >
             <div>
               <Label htmlFor="name">Menu Name</Label>
               <Input
@@ -113,19 +123,19 @@ const AddMenu= ({ item }: AddMenuProps)  => {
               <Switch
                 id="is_active"
                 checked={formData.is_active}
-                onCheckedChange={checked =>
-                  setFormData(prev => ({ ...prev, is_active: checked }))
-                }
+                onCheckedChange={(checked) => setFormData((prev) => ({ ...prev, is_active: checked }))}
               />
             </div>
 
-            <Button type="submit" className="w-full mt-4">
+            <Button
+              type="submit"
+              className="w-full mt-4"
+            >
               Add to Menu
             </Button>
           </form>
         </CardContent>
       </Card>
-
     </div>
   )
 }

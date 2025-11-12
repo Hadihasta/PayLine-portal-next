@@ -33,7 +33,7 @@ const MenuPage = () => {
     const getMenu = async () => {
       // create / get menu
       const InitMenu = await getAndCreateMenu(Number(user?.id))
-      console.log(InitMenu)
+      // console.log(InitMenu)
 
       if (InitMenu) {
         const menuId = Number(InitMenu?.data.id)
@@ -41,7 +41,7 @@ const MenuPage = () => {
         const getItemExist = async () => {
           const res = await getItemByMenuId(menuId)
           
-          console.log(res)
+          // console.log(res)
           setItem(res.data)
 
         }
@@ -56,7 +56,7 @@ const MenuPage = () => {
     <div className="p-6">
       <div className="flex justify-center font-bold text-greenPrimary mt-3">Add Item To the Menu</div>
       <div className="grid grid-cols-3 gap-4">
-        <AddMenu item={item}/>
+        <AddMenu data={user} />
         {item.map((menu) => (
           <ListMenu
             key={menu.id}

@@ -15,3 +15,17 @@ export async function getAndCreateMenu(id: number) {
   }
 }
 
+
+
+
+export async function getMenuByUserId(id: number) {
+  try {
+    
+    const res = await axios.get(`menu/getby/${id}`)
+    return res
+  } catch (err) {
+    // console.error('getStoreByUserId gagal:', err)
+    throw err
+  }
+}
+
