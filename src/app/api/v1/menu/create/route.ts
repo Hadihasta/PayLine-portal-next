@@ -38,7 +38,7 @@ export async function POST(req: Request) {
 
     if (existingMenu) {
       return NextResponse.json(
-        { message: 'Menu dengan nama tersebut sudah ada untuk store ini tes', data: serializeBigInt(existingMenu)},
+        { message: 'Menu dengan nama tersebut sudah ada untuk store ini ', data: serializeBigInt(existingMenu)},
         { status: 200 }
       )
     }

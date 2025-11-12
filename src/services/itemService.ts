@@ -1,6 +1,4 @@
-import axios from "@/lib/axios"
-
-
+import axios from '@/lib/axios'
 
 export async function getItemByMenuId(id: number) {
   try {
@@ -12,5 +10,16 @@ export async function getItemByMenuId(id: number) {
   }
 }
 
-
-
+export async function postItemCreate(formData: FormData) {
+  try {
+    const res = await axios.post('item/create', formData, {
+      // headers: {
+      //      Authorization: `Bearer ${token}`,
+      // },
+    })
+    return res.data
+  } catch (err) {
+    console.error('Error create item:', err)
+    throw err
+  }
+}

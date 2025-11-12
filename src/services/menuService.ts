@@ -1,11 +1,9 @@
-import axios from "@/lib/axios"
-
-
+import axios from '@/lib/axios'
 
 export async function getAndCreateMenu(id: number) {
   try {
     const payload = {
-        store_id : id
+      store_id: id,
     }
     const res = await axios.post(`menu/create/`, payload)
     return res.data
@@ -15,3 +13,12 @@ export async function getAndCreateMenu(id: number) {
   }
 }
 
+export async function getMenuByUserId(id: number) {
+  try {
+    const res = await axios.get(`menu/getby/${id}`)
+    return res.data
+  } catch (err) {
+    // console.error('getStoreByUserId gagal:', err)
+    throw err
+  }
+}
