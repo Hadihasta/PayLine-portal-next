@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Button from '../global/Button'
 import { getStoreTableByStoreId } from '@/services/storeTableService'
 
@@ -8,13 +8,22 @@ export interface StoreTableProps {
   name: string
 }
 
+interface masterTableProps { 
+    id : string
+    qr_code: string 
+    table_number: string
+    store_id: string
+}
+
 const StoreTable: React.FC<StoreTableProps> = (props) => {
+    const [masterTable, setMasterTable] = useState([])
   const { id, name } = props
 
   useEffect(() => {
     const getMasterTable = async () => {
       try {
         const res = await getStoreTableByStoreId(id)
+        setMasterTable(res)
         console.log(res, ' get the table ')
       } catch (error) {
         console.log('error', error)
@@ -31,7 +40,6 @@ const StoreTable: React.FC<StoreTableProps> = (props) => {
   return (
     <>
       <div className="flex justify-center font-bold text-greenPrimary">Table Management</div>
-
       <div className="mt-3">
         <div className="border rounded-md shadow-sm overflow-hidden">
           <table className="w-full text-sm text-left border-collapse">
@@ -43,11 +51,16 @@ const StoreTable: React.FC<StoreTableProps> = (props) => {
               </tr>
             </thead>
             <tbody>
-              <tr className="border-b hover:bg-gray-50">
+                {masterTable.map((item: masterTableProps,index)=> <tr key={index}>
+                     <td className="px-4 py-3">{item.table_number}</td>
+                <td className="px-4 py-3">{item.qr_code}</td>
+                <td className="px-4 py-3">{`GENERATE QR STRUK | DUMMY`}</td>
+                </tr>)}
+              {/* <tr className="border-b hover:bg-gray-50">
                 <td className="px-4 py-3">{`Unknown`}</td>
                 <td className="px-4 py-3">{`GENERATE TABLE QR `}</td>
                 <td className="px-4 py-3">{`GENERATE QR STRUK`}</td>
-              </tr>
+              </tr> */}
             </tbody>
             <tbody>
               <tr className="border-b hover:bg-gray-50">
