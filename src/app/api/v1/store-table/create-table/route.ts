@@ -40,35 +40,35 @@ export async function POST(req: Request) {
 
     // 4️⃣ Upload hasil QR ke Supabase Storage (bucket public)
     const fileName = `qr-${store_id}-${table_number}-${Date.now()}.png`
-    // const { data: uploadData, error: uploadError } = await supabase.storage
-    //   .from(process.env.SUPABASE_BUCKET_QR!) // misal bucket-nya bernama 'qrcodes'
-    //   .upload(fileName, qrBuffer, {
-    //     contentType: 'image/png',
-    //     cacheControl: '3600',
-    //     upsert: false,
-    //   })
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from(process.env.SUPABASE_BUCKET_QR!) // misal bucket-nya bernama 'qrcodes'
+      .upload(fileName, qrBuffer, {
+        contentType: 'image/png',
+        cacheControl: '3600',
+        upsert: false,
+      })
 
-    // if (uploadError) {
-    //   console.error('Upload error:', uploadError)
-    //   return NextResponse.json({ message: 'Gagal upload QR ke Supabase', error: uploadError.message }, { status: 500 })
-    // }
+    if (uploadError) {
+      console.error('Upload error:', uploadError)
+      return NextResponse.json({ message: 'Gagal upload QR ke Supabase', error: uploadError.message }, { status: 500 })
+    }
 
     // 5️⃣ Ambil public URL
-    // const { data: publicUrlData } = supabase.storage.from(process.env.SUPABASE_BUCKET_QR!).getPublicUrl(uploadData.path)
+    const { data: publicUrlData } = supabase.storage.from(process.env.SUPABASE_BUCKET_QR!).getPublicUrl(uploadData.path)
 
-    // const qrPublicUrl = publicUrlData.publicUrl
+    const qrPublicUrl = publicUrlData.publicUrl
 
     // 6️⃣ Update field `qr_code` di database
-    // const updatedTable = await prisma.storeTable.update({
-    //   where: { id: newTable.id },
-    //   data: { qr_code: qrPublicUrl },
-    // })
+    const updatedTable = await prisma.storeTable.update({
+      where: { id: newTable.id },
+      data: { qr_code: qrPublicUrl },
+    })
 
     return NextResponse.json(
       {
         message: 'Store table berhasil dibuat dan QR code terupload',
         data: serializeBigInt({
-          // ...updatedTable,
+          ...updatedTable,
           qr_target: qrTargetUrl,
         }),
       },

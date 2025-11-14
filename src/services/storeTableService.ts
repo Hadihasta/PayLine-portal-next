@@ -17,6 +17,7 @@ interface createStoreTableProps {
 
 export async function createStoreTable(payload: createStoreTableProps) {
   try {
+ 
     const res = await axios.post(`/store-table/create-table`, payload)
     return res
   } catch (error) {
