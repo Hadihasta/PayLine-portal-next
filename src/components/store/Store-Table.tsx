@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import Button from '../global/Button'
 import { getStoreTableByStoreId, createStoreTable } from '@/services/storeTableService'
+import Modal from '../global/Modal'
 
 export interface StoreTableProps {
   id: string
@@ -65,7 +66,11 @@ const StoreTable: React.FC<StoreTableProps> = (props) => {
               {masterTable.map((item: masterTableProps, index) => (
                 <tr key={index}>
                   <td className="px-4 py-3">{item.table_number}</td>
-                  <td className="px-4 py-3">{item.qr_code}</td>
+                  <td className="px-4 py-3">
+                    {/* {item.qr_code} */}
+
+                    <Modal/>
+                  </td>
                   <td className="px-4 py-3">{`GENERATE QR STRUK | DUMMY`}</td>
                 </tr>
               ))}
@@ -87,7 +92,7 @@ const StoreTable: React.FC<StoreTableProps> = (props) => {
                 </td>
                 <td className="px-4 py-3">
                   {/* diambil dari props  */}
-                  <div>{JSON.stringify(props)}</div>
+                  {/* <div>{JSON.stringify(props)}</div> */}
                 </td>
               </tr>
             </tbody>
