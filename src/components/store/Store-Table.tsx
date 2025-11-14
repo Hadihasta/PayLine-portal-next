@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import Button from '../global/Button'
-import { getStoreTableByStoreId } from '@/services/storeTableService'
+import { getStoreTableByStoreId , createStoreTable} from '@/services/storeTableService'
 
 export interface StoreTableProps {
   id: string
@@ -33,8 +33,21 @@ const StoreTable: React.FC<StoreTableProps> = (props) => {
     getMasterTable()
   }, [id])
 
-  const createTableNummber = () => {
-    console.log('create new table')
+  const createTableNummber = async() => {
+    console.log('create new table' , masterTable.length + 1 + '')
+
+    // try {
+
+    //   const payload = { 
+    //     store_id,
+    //     table_number: masterTable.length
+    //   }
+
+    //   const res = await createStpreTable()
+      
+    // } catch (error) {
+    //   console.log(error)
+    // }
   }
 
   return (
