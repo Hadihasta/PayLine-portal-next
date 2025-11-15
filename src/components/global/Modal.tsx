@@ -10,10 +10,22 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
+import Image from 'next/image'
 
-const Modal = () => {
+
+interface ModalProps {
+   data: {
+    id: string
+    qr_code: string
+    table_number: string
+    store_id: string
+  }
+}
+
+const Modal = (props: ModalProps) => {
+  const { qr_code , table_number} = props.data
+
   const handleCreateTable = () => {
-
     console.log('modal open')
   }
 
@@ -29,22 +41,38 @@ const Modal = () => {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Edit profile</DialogTitle>
-          <DialogDescription>Make changes to your profile here. Click save when you&apos;re done.</DialogDescription>
+          <DialogTitle className="border-b pb-4">{`QR TABLE NUMBER ${table_number}`}</DialogTitle>
+          <DialogDescription className="flex justify-center mt-3">
+            Save To Your Computer or Print Manualy QR
+          </DialogDescription>
+ 
+          <div className="flex justify-center w-full h-100  relative rounded-sm border-4 border-greenPrimary ">
+            {qr_code ? 
+            
+              <Image
+              src={qr_code ? qr_code : ''}
+              alt="Qr Image"
+              fill
+            /> : 
+            <>
+              <div className='flex justify-center items-center text-gray-500'>Sory QR not Found Contact Administrator </div>
+            </>
+          }
+          </div>
         </DialogHeader>
         <div className="grid gap-4"></div>
         <DialogFooter>
           <DialogClose asChild>
             <Button
               color={'green'}
-              label="Cancel"
+              label="Save"
               className={''}
               // onClick={handleCreateTable}
             ></Button>
           </DialogClose>
           <Button
             color={'green'}
-            label="Submit"
+            label="Print"
             className={''}
             // onClick={handleCreateTable}
           ></Button>

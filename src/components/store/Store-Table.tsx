@@ -25,6 +25,7 @@ const StoreTable: React.FC<StoreTableProps> = (props) => {
       // master data table
       const res = await getStoreTableByStoreId(id)
       setMasterTable(res)
+      console.log(res)
       // console.log(res, ' get the table ')
     } catch (error) {
       console.log('error', error)
@@ -69,7 +70,7 @@ const StoreTable: React.FC<StoreTableProps> = (props) => {
                   <td className="px-4 py-3">
                     {/* {item.qr_code} */}
 
-                    <Modal/>
+                    <Modal data={item} />
                   </td>
                   <td className="px-4 py-3">{`GENERATE QR STRUK | DUMMY`}</td>
                 </tr>
