@@ -11,8 +11,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import Image from 'next/image'
-import jsPDF from 'jspdf';
-
+import jsPDF from 'jspdf'
 
 interface ModalProps {
   data: {
@@ -30,14 +29,12 @@ const Modal = (props: ModalProps) => {
     console.log('modal open')
   }
 
-
-
-function downloadPdf() {
-  const doc = new jsPDF();
-  const img = qr_code;
-  doc.addImage(img, 'JPEG', 50, 10, 100, 100);
-  doc.save(`qr_table_${table_number}.pdf`);
-}
+  function downloadPdf() {
+    const doc = new jsPDF()
+    const img = qr_code
+    doc.addImage(img, 'JPEG', 60, 10, 100, 100)
+    doc.save(`qr_table_${table_number}.pdf`)
+  }
 
   return (
     <Dialog>
@@ -74,17 +71,12 @@ function downloadPdf() {
         </DialogHeader>
         <div className="grid gap-4"></div>
         <DialogFooter>
-          <DialogClose asChild>
-            <Button
-              color={'green'}
-              label="Save"
-              className={''}
-              // onClick={handleCreateTable}
-            ></Button>
-          </DialogClose>
+          {/* <DialogClose asChild>
+      
+          </DialogClose> */}
           <Button
             color={'green'}
-            label="Print"
+            label="Download Pdf"
             className={''}
             onClick={downloadPdf}
           ></Button>
