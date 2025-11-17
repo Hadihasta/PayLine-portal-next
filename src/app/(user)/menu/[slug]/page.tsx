@@ -1,8 +1,11 @@
 import React from 'react'
+import ViewMenuPage from '@/components/user-menu/ViewMenuPage'
 
 const page = () => {
   return (
-    <div>page QR</div>
+    <div>
+      <ViewMenuPage/>
+    </div>
   )
 }
 
