@@ -5,10 +5,19 @@ import { useAuthStore } from '@/store/authStore'
 import clsx from 'clsx'
 import Button from '@/components/global/Button'
 import { ToasterNotif } from '@/components/global/ToasterNotif'
+import StoreTable from '@/components/store/Store-Table'
+
+
+interface Store {
+  id: string
+  name: string
+  created_at: string
+  updated_at: string
+}
 
 const Page = () => {
   const [isHydrated, setIsHydrated] = useState(false)
-  const [store, setStore] = useState([])
+  const [store, setStore] = useState<Store[]>([])
   // destructure useAuthStore
   const { token, user } = useAuthStore()
   const [storeName, setStoreName] = useState('')
@@ -43,10 +52,10 @@ const Page = () => {
 
   const handleSubmit = async () => {
     try {
-        if (!user) {
-      ToasterNotif('error', 'User not found. Please login again.', '#dc2626')
-      return
-    }
+      if (!user) {
+        ToasterNotif('error', 'User not found. Please login again.', '#dc2626')
+        return
+      }
 
       if (storeName.trim() === '') {
         ToasterNotif('warning', `Store Name Cannot be Empty...`, '#dc2626')
@@ -68,6 +77,7 @@ const Page = () => {
       console.log(error)
     }
   }
+
 
   return (
     <div className="px-6 pt-10 flex flex-col ">
@@ -109,32 +119,8 @@ const Page = () => {
         </>
       ) : (
         <>
-            <div className="flex justify-center font-bold text-greenPrimary">Give Your Store Name</div>
-
-          <div className="mt-3">
-            <div className="border rounded-md shadow-sm overflow-hidden">
-              <table className="w-full text-sm text-left border-collapse">
-                <thead className="bg-gray-50 border-b">
-                  <tr>
-                    <th className="px-4 py-3 font-semibold">Table Number</th>
-                    <th className="px-4 py-3 font-semibold">Status</th>
-                    <th className="px-4 py-3 font-semibold">QR STRUK</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="border-b hover:bg-gray-50">
-                    <td className="px-4 py-3">{`Unknown`}</td>
-                    <td className="px-4 py-3">{`GENERATE TABLE QR `}</td>
-                    <td className="px-4 py-3">{`GENERATE QR STRUK`}</td>
-                  </tr>
-                </tbody>
-              </table>
-
-              <div className="flex justify-end items-center p-3 bg-gray-50">
-                <button className="px-3 py-1 border rounded text-sm hover:bg-gray-100">1</button>
-              </div>
-            </div>
-          </div>
+       <StoreTable  id={store[0].id} name={store[0].name}/>
+       {/* <div>{JSON.stringify(store[0].id)}</div> */}
         </>
       )}
     </div>
