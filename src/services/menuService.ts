@@ -23,6 +23,22 @@ export async function getMenuByUserId(id: number) {
   }
 }
 
+export interface GetMenuBySlugRes {
+  menus: {
+    id: string
+    name: string
+    store_id: string
+  }
+  table: {
+    id: string
+    qr_code: string
+    table_number: string
+    store_id: string
+    slug: string
+  }
+}
+
+
 
 export async function getMenuBySlug(slug: string) {
   try {

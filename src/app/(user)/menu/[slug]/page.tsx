@@ -6,7 +6,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
   return (
     <div>
       {/* <ViewMenuPage slug={slug}/> */}
-      <UserRegistrationPage />
+      <UserRegistrationPage slug={slug}/>
     </div>
   )
 }

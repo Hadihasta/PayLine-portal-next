@@ -1,11 +1,19 @@
 import React from 'react'
 import RegisterUserForm from './RegisterUserForm'
 
-const UserRegistrationPage = () => {
+
+interface getMenuBySlugProps {
+  slug: string
+}
+
+
+const UserRegistrationPage = (props: getMenuBySlugProps) => {
+    const { slug } = props
+
   return (
-    <>
-      <RegisterUserForm />
-    </>
+    <div className='p-6 '>
+      <RegisterUserForm   slug={slug} />
+    </div> 
   )
 }
 
