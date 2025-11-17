@@ -162,6 +162,7 @@ model StoreTable {
   store_id     BigInt
   table_number String
   qr_code      String     @unique
+  slug         String     @unique
   created_at   DateTime   @default(now())
   updated_at   DateTime   @default(now())
 
