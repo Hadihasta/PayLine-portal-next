@@ -22,3 +22,15 @@ export async function getMenuByUserId(id: number) {
     throw err
   }
 }
+
+
+export async function getMenuBySlug(slug: string) {
+  try {
+    const res = await axios.get(`table/by-slug/${slug}`)
+    return res.data
+  } catch (err) {
+    // console.error('getStoreByUserId gagal:', err)
+    throw err
+  }
+}
+
