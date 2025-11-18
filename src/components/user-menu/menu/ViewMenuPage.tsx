@@ -1,6 +1,8 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, {  useEffect, useState } from 'react'
 import { getMenuBySlug } from '@/services/menuService'
+import MenuList from './MenuList'
+import PaymentMethod from '../payment-method/PaymentMethod'
 
 interface ViewMenuPageProps {
   slug: string
@@ -8,6 +10,7 @@ interface ViewMenuPageProps {
 
 const ViewMenuPage = (props: ViewMenuPageProps) => {
   const [tableData, setTableData] = useState(null)
+  const [menus, setMenus] = useState([])
 
   const { slug } = props
 
@@ -24,13 +27,16 @@ const ViewMenuPage = (props: ViewMenuPageProps) => {
     }
 
     getMasterMenu()
-  }, [])
+  }, [slug])
 
   return (
-    <>
-      <div>ViewMenuPage</div>
-      <div>{slug}</div>
-    </>
+    <div className="p-6">
+        <div>{JSON.stringify(tableData)}</div>
+      <div className="flex justify-center font-bold text-greenPrimary">Menu</div>
+    
+      <MenuList />
+      <PaymentMethod />
+    </div>
   )
 }
 

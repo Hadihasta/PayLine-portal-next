@@ -5,7 +5,8 @@ import RegisterUserForm from './RegisterUserForm'
 import NavFooter from '../NavFooter'
 import { useAuthStore } from '@/store/authStore'
 import { registerUser } from '@/services/authservice'
-import PaymentMethod from '../payment-method/PaymentMethod'
+import { useRouter } from 'next/navigation'
+
 
 interface getMenuBySlugProps {
   slug: string
@@ -16,11 +17,13 @@ const UserRegistrationPage = (props: getMenuBySlugProps) => {
   const [validator, setValidator] = useState(false)
   const { slug } = props
 
-// zustand
+  // zustand
   const setAuth = useAuthStore((state) => state.setAuth)
+  
+  const router = useRouter()
+  
+ 
 
-
-  const localStorageItem = localStorage.getItem("auth-storage");
   useEffect(() => {
     if (customerName.trim() !== '') {
       setValidator(false)
@@ -36,13 +39,13 @@ const UserRegistrationPage = (props: getMenuBySlugProps) => {
       const res = await registerUser(customerName)
       setAuth(res.token, res.data)
       console.log(res)
+      if(res.status === 201){ 
+           router.push(`/menu/order/${slug}`)
+      }
      
     } catch (error) {
       console.log(error)
     }
-
-    // di sini kamu bisa ambil state dari RegisterUserForm pakai lifting state
-    // atau pakai useRef untuk input name
   }
 
   return (
@@ -55,9 +58,7 @@ const UserRegistrationPage = (props: getMenuBySlugProps) => {
           validator={validator}
         />
       </div>
-      <div>{localStorageItem}</div>
       <NavFooter onClickFooter={handleSubmitUser} />
-      {/* <PaymentMethod/> */}
     </div>
   )
 }

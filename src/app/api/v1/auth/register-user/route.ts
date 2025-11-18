@@ -36,8 +36,8 @@ export async function POST(req: Request) {
           name: newUser.name,
         },
         token, 
+        status: 201
       },
-      { status: 201 }
     );
 
   } catch (error) {

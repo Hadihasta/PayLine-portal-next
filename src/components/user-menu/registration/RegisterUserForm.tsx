@@ -54,13 +54,16 @@ const RegisterUserForm = (props: getMenuBySlugProps) => {
             onChange={(e) => setCustomerName(e.target.value)}
             className={clsx(
               'peer w-full  border rounded-lg px-4 pt-4 pb-2 font-bold text-greenPrimary text-sm outline-none transition-all',
-              'border-gray-300 focus:border-greenPrimary focus:ring-1 focus:ring-greenPrimary'
+              'border-gray-300 focus:border-greenPrimary focus:ring-1 focus:ring-greenPrimary',
+                  validator
+                && 'border-redDanger transition-all duration-200'
+               ,
             )}
           />
 
           {validator && (
             <div className="mt-2 text-sm font-semibold  transition-all duration-200">
-              <span className="text-redDanger "> Nama tidak boleh kosong...</span>
+              <span className="text-redDanger"> Nama tidak boleh kosong...</span>
             </div>
           )}
 
