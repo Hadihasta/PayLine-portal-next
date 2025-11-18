@@ -1,6 +1,5 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import Button from '@/components/global/Button'
 import clsx from 'clsx'
 import { getMenuBySlug } from '@/services/menuService'
 import type { GetMenuBySlugRes } from '@/services/menuService'
@@ -8,13 +7,14 @@ import Image from 'next/image'
 
 interface getMenuBySlugProps {
   slug: string
-  customerName : string
-  setCustomerName  :(name : string) => void
+  customerName: string
+  // funtion mengirim satu nilai dan tidak return apapun
+  setCustomerName: (name: string) => void
 }
 
 const RegisterUserForm = (props: getMenuBySlugProps) => {
   // const [tableData, setTableData] = useState<GetMenuBySlugRes | null>(null)
-const {customerName ,setCustomerName} = props
+  const { customerName, setCustomerName } = props
   const [tableNumber, setTableNumber] = useState('')
 
   const { slug } = props
@@ -78,7 +78,7 @@ const {customerName ,setCustomerName} = props
             value={tableNumber}
           />
         </div>
-        <div className='relative h-100 w-full mt-6'>
+        <div className="relative h-100 w-full mt-6">
           <Image
             src="/asset/vektor/vektor-form-input-720.svg"
             alt="cashier"
