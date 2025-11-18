@@ -23,6 +23,7 @@ const Page = () => {
   const [storeName, setStoreName] = useState('')
 
   // tahap 1 useEffect (pastikan rehydrate succes dan restore zustand)
+  //ambil dari lokal storage
   useEffect(() => {
     const unsub = useAuthStore.persist.onFinishHydration(() => {
       setIsHydrated(true)

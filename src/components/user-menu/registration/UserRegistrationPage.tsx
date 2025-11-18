@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import RegisterUserForm from './RegisterUserForm'
 import NavFooter from '../NavFooter'
+import { useAuthStore } from '@/store/authStore'
 import { registerUser } from '@/services/authservice'
 import PaymentMethod from '../payment-method/PaymentMethod'
 
@@ -15,6 +16,11 @@ const UserRegistrationPage = (props: getMenuBySlugProps) => {
   const [validator, setValidator] = useState(false)
   const { slug } = props
 
+// zustand
+  const setAuth = useAuthStore((state) => state.setAuth)
+
+
+  const localStorageItem = localStorage.getItem("auth-storage");
   useEffect(() => {
     if (customerName.trim() !== '') {
       setValidator(false)
@@ -27,8 +33,10 @@ const UserRegistrationPage = (props: getMenuBySlugProps) => {
       return
     }
     try {
-      // const res = await registerUser(customerName)
-      console.log(customerName)
+      const res = await registerUser(customerName)
+      setAuth(res.token, res.data)
+      console.log(res)
+     
     } catch (error) {
       console.log(error)
     }
@@ -47,6 +55,7 @@ const UserRegistrationPage = (props: getMenuBySlugProps) => {
           validator={validator}
         />
       </div>
+      <div>{localStorageItem}</div>
       <NavFooter onClickFooter={handleSubmitUser} />
       {/* <PaymentMethod/> */}
     </div>

@@ -22,6 +22,7 @@ export const useAuthStore = create<AuthState>()(
       user: null,
       setAuth: (token, user) => {
         localStorage.setItem('token', token)
+  // console.log(" setAuth called:", { token, user })
         set({ token, user })
       },
       logout: () => {
@@ -33,7 +34,7 @@ export const useAuthStore = create<AuthState>()(
       // simpan di local storage dengan nama yang unique auth storage
       name: 'auth-storage',
       onRehydrateStorage: () => (state) => {
-        // console.log("rehydrated dari localStorage:", state)
+        console.log("rehydrated dari localStorage:", state)
       },
     }
   )
