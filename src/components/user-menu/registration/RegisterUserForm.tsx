@@ -8,11 +8,13 @@ import Image from 'next/image'
 
 interface getMenuBySlugProps {
   slug: string
+  customerName : string
+  setCustomerName  :(name : string) => void
 }
 
 const RegisterUserForm = (props: getMenuBySlugProps) => {
-  const [tableData, setTableData] = useState<GetMenuBySlugRes | null>(null)
-  const [customerName, setCustomerName] = useState('')
+  // const [tableData, setTableData] = useState<GetMenuBySlugRes | null>(null)
+const {customerName ,setCustomerName} = props
   const [tableNumber, setTableNumber] = useState('')
 
   const { slug } = props
@@ -44,7 +46,7 @@ const RegisterUserForm = (props: getMenuBySlugProps) => {
             value={customerName}
             onChange={(e) => setCustomerName(e.target.value)}
             className={clsx(
-              'peer w-full border rounded-lg px-4 pt-4 pb-2 text-sm outline-none transition-all',
+              'peer w-full  border rounded-lg px-4 pt-4 pb-2 font-bold text-greenPrimary text-sm outline-none transition-all',
               'border-gray-300 focus:border-greenPrimary focus:ring-1 focus:ring-greenPrimary'
             )}
           />
