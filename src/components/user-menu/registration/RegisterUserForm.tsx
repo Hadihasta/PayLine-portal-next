@@ -10,18 +10,22 @@ interface getMenuBySlugProps {
   customerName: string
   // funtion mengirim satu nilai dan tidak return apapun
   setCustomerName: (name: string) => void
+ 
+  validator: boolean
+
 }
 
 const RegisterUserForm = (props: getMenuBySlugProps) => {
   // const [tableData, setTableData] = useState<GetMenuBySlugRes | null>(null)
-  const { customerName, setCustomerName } = props
+  const { slug, customerName, setCustomerName ,validator } = props
   const [tableNumber, setTableNumber] = useState('')
 
-  const { slug } = props
+
 
   useEffect(() => {
     const getMasterMenu = async () => {
       try {
+      
         const res = await getMenuBySlug(slug)
         console.log(res)
         // disini ada table number dan store id dan slug juga ada
@@ -34,6 +38,9 @@ const RegisterUserForm = (props: getMenuBySlugProps) => {
 
     getMasterMenu()
   }, [])
+
+
+ 
 
   return (
     <>
@@ -50,6 +57,12 @@ const RegisterUserForm = (props: getMenuBySlugProps) => {
               'border-gray-300 focus:border-greenPrimary focus:ring-1 focus:ring-greenPrimary'
             )}
           />
+
+          {validator && (
+            <div className="mt-2 text-sm font-semibold  transition-all duration-200">
+              <span className="text-redDanger "> Nama tidak boleh kosong...</span>
+            </div>
+          )}
 
           <label
             htmlFor="customerName"

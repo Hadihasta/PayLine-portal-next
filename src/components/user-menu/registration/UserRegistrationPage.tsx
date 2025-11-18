@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import RegisterUserForm from './RegisterUserForm'
 import NavFooter from '../NavFooter'
 import { registerUser } from '@/services/authservice'
@@ -12,9 +12,20 @@ interface getMenuBySlugProps {
 
 const UserRegistrationPage = (props: getMenuBySlugProps) => {
   const [customerName, setCustomerName] = useState('')
+  const [validator, setValidator] = useState(false)
   const { slug } = props
 
+  useEffect(() => {
+    if (customerName.trim() !== '') {
+      setValidator(false)
+    }
+  }, [customerName])
+
   const handleSubmitUser = async () => {
+    if (customerName.trim() === '') {
+      setValidator(true)
+      return
+    }
     try {
       // const res = await registerUser(customerName)
       console.log(customerName)
@@ -33,6 +44,7 @@ const UserRegistrationPage = (props: getMenuBySlugProps) => {
           slug={slug}
           customerName={customerName}
           setCustomerName={setCustomerName}
+          validator={validator}
         />
       </div>
       <NavFooter onClickFooter={handleSubmitUser} />
