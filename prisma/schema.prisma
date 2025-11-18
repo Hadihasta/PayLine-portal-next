@@ -181,7 +181,7 @@ model Cart {
   user_id      BigInt
   store_id     BigInt
   table_id     BigInt
-  total_cost   BigInt?
+  total_cost   Int?
   created_at   DateTime     @default(now())
   updated_at   DateTime     @default(now())
 
