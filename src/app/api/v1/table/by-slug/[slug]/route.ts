@@ -7,7 +7,7 @@ export async function GET(
   { params }: { params: { slug: string } }
 ) {
   try {
-    const { slug } = params
+    const { slug } = await params
 
     const table = await prisma.storeTable.findUnique({
       where: { slug },
@@ -24,10 +24,13 @@ export async function GET(
     }
 
     // ambil menu berdasarkan store_id
-    const menus = await prisma.menu.findMany({
+    const menus = await prisma.menu.findFirst({
       where: {
         store_id: table.store_id,
       },
+      include: {
+    items: true   
+  },
     })
 
     return NextResponse.json(

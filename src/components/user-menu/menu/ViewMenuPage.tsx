@@ -1,8 +1,17 @@
 'use client'
-import React, {  useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { getMenuBySlug } from '@/services/menuService'
 import MenuList from './MenuList'
 import PaymentMethod from '../payment-method/PaymentMethod'
+
+interface menuListProps {
+  id: string
+  category: string
+  image_url: string
+  name: string
+  price: string
+  is_active: boolean
+}
 
 interface ViewMenuPageProps {
   slug: string
@@ -10,7 +19,7 @@ interface ViewMenuPageProps {
 
 const ViewMenuPage = (props: ViewMenuPageProps) => {
   const [tableData, setTableData] = useState(null)
-  const [menus, setMenus] = useState([])
+  const [menus, setMenus] = useState<menuListProps[]>([])
 
   const { slug } = props
 
@@ -18,9 +27,10 @@ const ViewMenuPage = (props: ViewMenuPageProps) => {
     const getMasterMenu = async () => {
       try {
         const res = await getMenuBySlug(slug)
-        console.log(res.table)
-        // disini ada table number dan store id dan slug juga ada
+
+        setMenus(res.menus.items)
         setTableData(res.table)
+        console.log(res.menus.items)
       } catch (error) {
         console.log(error)
       }
@@ -31,10 +41,17 @@ const ViewMenuPage = (props: ViewMenuPageProps) => {
 
   return (
     <div className="p-6">
-        <div>{JSON.stringify(tableData)}</div>
+      {/* <div>{JSON.stringify(menus)}</div> */}
       <div className="flex justify-center font-bold text-greenPrimary">Menu</div>
-    
-      <MenuList />
+      <div>Catergory bar here later</div>
+      {menus.map((menu) => (
+        <MenuList
+          key={menu.id}
+          data={menu}
+        />
+      ))} 
+
+
       <PaymentMethod />
     </div>
   )
