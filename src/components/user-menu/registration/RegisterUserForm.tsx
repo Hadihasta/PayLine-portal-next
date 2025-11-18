@@ -4,6 +4,7 @@ import Button from '@/components/global/Button'
 import clsx from 'clsx'
 import { getMenuBySlug } from '@/services/menuService'
 import type { GetMenuBySlugRes } from '@/services/menuService'
+import Image from 'next/image'
 
 interface getMenuBySlugProps {
   slug: string
@@ -73,6 +74,14 @@ const RegisterUserForm = (props: getMenuBySlugProps) => {
               'border-gray-300 focus:border-greenPrimary focus:ring-1 focus:ring-greenPrimary'
             )}
             value={tableNumber}
+          />
+        </div>
+        <div className='relative h-100 w-full mt-6'>
+          <Image
+            src="/asset/vektor/vektor-form-input-720.svg"
+            alt="cashier"
+            className="rounded-md  "
+            fill
           />
         </div>
       </div>

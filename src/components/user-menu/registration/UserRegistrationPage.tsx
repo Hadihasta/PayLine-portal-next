@@ -1,6 +1,7 @@
 import React from 'react'
 import RegisterUserForm from './RegisterUserForm'
 import PaymentMethod from '../payment-method/PaymentMethod'
+import NavFooter from '../NavFooter'
 
 
 interface getMenuBySlugProps {
@@ -12,11 +13,14 @@ const UserRegistrationPage = (props: getMenuBySlugProps) => {
     const { slug } = props
 
   return (
-    <div>
-    <div className='p-6 '>
+    <div className='flex flex-col min-h-screen'>
+    <div className='p-6  grow '>
       <RegisterUserForm   slug={slug} />
     </div> 
-      <PaymentMethod/>
+    {/* component go to menu ===> */}
+    
+    <NavFooter />
+      {/* <PaymentMethod/> */}
     </div>
   )
 }
