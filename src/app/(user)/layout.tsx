@@ -15,7 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <>
-      <main className={`${nunito.variable} antialiased`}>
+      <main className={`${nunito.variable} antialiased `}>
         {children}
       </main>
     </>

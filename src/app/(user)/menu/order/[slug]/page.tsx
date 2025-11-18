@@ -1,12 +1,13 @@
 import React from 'react'
-import UserRegistrationPage from '@/components/user-menu/registration/UserRegistrationPage'
+import ViewMenuPage from '@/components/user-menu/menu/ViewMenuPage';
+
 
 
 export default async function Page({ params }: {   params: Promise<{ slug: string }> }) {
    const { slug } = await params;
   return (
     <>
-      <UserRegistrationPage slug={slug}/>
+      <ViewMenuPage slug={slug}/>
     </>
   )
 }

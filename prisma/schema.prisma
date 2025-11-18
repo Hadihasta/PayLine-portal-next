@@ -39,11 +39,14 @@ model RolesPermissions {
 
 // ===================== USERS & AUTHS =====================
 
+// user cuma mau masukin nama untuk order 
+//  next step baru membutuhkan nama , nomor telfon , dan email
+// admin membutuhkan email, nama , nomor telfon, username, password
 model User {
   id           BigInt       @id @default(autoincrement())
   role_id      BigInt?
   email        String?
-  phone_number String
+  phone_number String?
   name         String
   is_active    Boolean       @default(true)
   created_at   DateTime      @default(now())

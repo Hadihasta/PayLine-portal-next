@@ -40,3 +40,15 @@ export async function registerAccount(payload: RegisterPayload) {
     throw err 
   }
 }
+
+export async function registerUser(name: string ) {
+  try {
+    const payload = { 
+      name
+    }
+    const res = await axios.post('/auth/register-user', payload)
+    return res.data
+  } catch (err ) {
+    throw err 
+  }
+}

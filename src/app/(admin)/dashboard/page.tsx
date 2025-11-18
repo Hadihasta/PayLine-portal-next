@@ -23,6 +23,7 @@ const Page = () => {
   const [storeName, setStoreName] = useState('')
 
   // tahap 1 useEffect (pastikan rehydrate succes dan restore zustand)
+  //ambil dari lokal storage
   useEffect(() => {
     const unsub = useAuthStore.persist.onFinishHydration(() => {
       setIsHydrated(true)
@@ -83,7 +84,7 @@ const Page = () => {
     <div className="px-6 pt-10 flex flex-col ">
       {store.length === 0 ? (
         <>
-          <div className="flex justify-center font-bold text-greenPrimary">Give Your Store Name</div>
+          <div className="flex justify-center font-bold text-greenPrimary">Input Your Name</div>
           <div className="relative">
             <input
               id="storeName"

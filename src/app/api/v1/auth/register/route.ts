@@ -4,8 +4,9 @@ import { serializeBigInt } from "@/lib/serializeBigIntToString"
 
 export async function POST(req: Request) {
   try {
+    // register for admin
     const { name, email, phone_number, username, password } = await req.json()
-
+// database schema butuh di update
      if (!name || !phone_number || !username || !password) {
       return Response.json({ error: "Missing required fields" }, { status: 400 })
     }
