@@ -5,7 +5,6 @@ import QRCode from 'qrcode'
 import { serializeBigInt } from '@/lib/serializeBigIntToString'
 import { generateSlug } from '@/lib/generateSlug'
 
-// Supabase service key (server only)
 const supabase = createClient(
   process.env.SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
@@ -23,10 +22,11 @@ export async function POST(req: Request) {
       )
     }
 
-    // 1️⃣ Generate SLUG unik
+    // -----------------------------
+    // 1) Generate unique slug
+    // -----------------------------
     let slug = generateSlug()
 
-    // pastikan slug tidak duplicate
     while (true) {
       const exists = await prisma.storeTable.findUnique({
         where: { slug },
@@ -35,30 +35,39 @@ export async function POST(req: Request) {
       slug = generateSlug()
     }
 
-    // 2️⃣ Simpan store table dengan slug
+    // -----------------------------
+    // 2) Create StoreTable TEMP DATA
+    // -----------------------------
     const newTable = await prisma.storeTable.create({
       data: {
         store_id: BigInt(store_id),
         table_number,
         slug,
-        qr_code: 'temp', // akan diupdate nanti
+        qr_code: 'temp', // update later
       },
     })
 
-    // 3️⃣ URL untuk dimasukkan ke QR
+    // -----------------------------
+    // 3) Generate QR URL
+    // -----------------------------
     const qrTargetUrl = `${process.env.QR_GENERATE_URL}/menu/${slug}`
 
-    // 4️⃣ Generate QR sebagai buffer
+    // -----------------------------
+    // 4) Generate QR Image Buffer
+    // -----------------------------
     const qrBuffer = await QRCode.toBuffer(qrTargetUrl, {
       width: 400,
       margin: 2,
     })
 
-    // 5️⃣ Upload QR ke Supabase Storage
+    // -----------------------------
+    // 5) Upload QR to Supabase
+    // -----------------------------
     const fileName = `qr-${slug}-${Date.now()}.png`
+    const bucket = process.env.SUPABASE_BUCKET_QR!
 
     const { data: uploadData, error: uploadError } = await supabase.storage
-      .from(process.env.SUPABASE_BUCKET_QR!)
+      .from(bucket)
       .upload(fileName, qrBuffer, {
         contentType: 'image/png',
         cacheControl: '3600',
@@ -72,26 +81,44 @@ export async function POST(req: Request) {
       )
     }
 
-    // 6️⃣ Ambil public URL
     const { data: publicUrlData } = supabase.storage
-      .from(process.env.SUPABASE_BUCKET_QR!)
+      .from(bucket)
       .getPublicUrl(uploadData.path)
 
     const qrPublicUrl = publicUrlData.publicUrl
 
-    // 7️⃣ Update record dengan QR final
+    // -----------------------------
+    // 6) Update StoreTable with final QR URL
+    // -----------------------------
     const updatedTable = await prisma.storeTable.update({
       where: { id: newTable.id },
       data: { qr_code: qrPublicUrl },
     })
 
+    // -----------------------------
+    // 7) Create Default Cart for This Table
+    // -----------------------------
+    const newCart = await prisma.cart.create({
+      data: {
+        store_id: BigInt(store_id),
+        table_id: updatedTable.id,
+        user_id: null,        // user belum ada → pakai NULL
+        total_cost: 0,
+      },
+    })
+
+    // -----------------------------
+    // 8) Respond
+    // -----------------------------
     return NextResponse.json(
       {
-        message: 'Store table berhasil dibuat',
+        message: 'Store table & default cart berhasil dibuat',
         data: serializeBigInt({
-          ...updatedTable,
+          table: updatedTable,
+          cart: newCart,
           slug,
           qr_target: qrTargetUrl,
+          qr_url: qrPublicUrl,
         }),
       },
       { status: 201 }

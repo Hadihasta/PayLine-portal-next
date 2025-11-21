@@ -35,6 +35,11 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
+<!-- =================================DATABASE======================================================== -->
+
+npx prisma generate (generate client prisma)
+npx prisma migrate dev (lakukan migrasi / generate database dengan schema yang sudah di buat)
+
 <!-- ================================================================================================================================ -->
 Directiory : 
 
