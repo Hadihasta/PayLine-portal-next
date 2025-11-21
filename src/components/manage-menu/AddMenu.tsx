@@ -14,29 +14,27 @@ export interface AddMenuProps {
   data: AuthUser | null
 }
 
-
-
 const AddMenu: React.FC<AddMenuProps> = ({ data }) => {
-  const [menuId,setMenuId] = useState<number>(0)
+  const [menuId, setMenuId] = useState<number>(0)
+  const [openDropdown, setOpenDropdown] = useState(false)
+  const [selectedCategory, setSelectedCategory] = useState('')
 
-useEffect(() => {
-  const getMenuId = async () => {
-    if (!data?.id) return 
-    try {
-      const res = await getMenuByUserId(parseInt(data.id))
-      setMenuId(res.data.id)
-    } catch (error) {
-      console.error(error)
+  useEffect(() => {
+    const getMenuId = async () => {
+      if (!data?.id) return
+      try {
+        const res = await getMenuByUserId(parseInt(data.id))
+        setMenuId(res.data.id)
+      } catch (error) {
+        console.error(error)
+      }
     }
-  }
 
-  getMenuId()
-}, [data]) 
-
-
+    getMenuId()
+  }, [data])
 
   const [formData, setFormData] = useState({
-    menu_id: String(menuId) || "0",
+    menu_id: String(menuId) || '0',
     name: '',
     price: 0,
     category: '',
@@ -54,48 +52,48 @@ useEffect(() => {
 
     setFormData((prev) => ({ ...prev, file: file }))
   }
-
-const handleSubmit = async (e: React.FormEvent) => {
-
-  e.preventDefault() // cegah reload
-  // sementara refetch dulu setelah penambahan item nanti dapat menggunakan tanstack dan fetch ketika auto focus atau setelah penambahan
-  // bisa juga pakai web socket biar real time tapi di setup lewat backend
-  if (!formData.file) {
-    console.error("File belum dipilih!")
-    return
+  const handleSelectCategory = (value: string) => {
+    setSelectedCategory(value)
+    setFormData((prev) => ({ ...prev, category: value }))
+    setOpenDropdown(false)
   }
-
-  try {
-  
-    const fd = new FormData()
-    fd.append("menu_id", String(menuId))
-    fd.append("name", formData.name)
-    fd.append("price", String(formData.price))
-    fd.append("category", formData.category)
-    fd.append("is_active", String(formData.is_active))
-    fd.append("file", formData.file) 
-
- 
-    const res = await postItemCreate(fd)
-    console.log("Item berhasil dikirim:", res)
-
-    
-    setFormData({
-      menu_id: String(menuId) || "0",
-      name: "",
-      price: 0,
-      category: "",
-      is_active: true,
-      file: null,
-    })
-
-    if (res.status === 201) { 
-      location.reload()
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault() // cegah reload
+    // sementara refetch dulu setelah penambahan item nanti dapat menggunakan tanstack dan fetch ketika auto focus atau setelah penambahan
+    // bisa juga pakai web socket biar real time tapi di setup lewat backend
+    if (!formData.file) {
+      console.error('File belum dipilih!')
+      return
     }
-  } catch (error) {
-    console.error("Gagal upload item:", error)
+
+    try {
+      const fd = new FormData()
+      fd.append('menu_id', String(menuId))
+      fd.append('name', formData.name)
+      fd.append('price', String(formData.price))
+      fd.append('category', formData.category)
+      fd.append('is_active', String(formData.is_active))
+      fd.append('file', formData.file)
+
+      const res = await postItemCreate(fd)
+      console.log('Item berhasil dikirim:', res)
+
+      setFormData({
+        menu_id: String(menuId) || '0',
+        name: '',
+        price: 0,
+        category: '',
+        is_active: true,
+        file: null,
+      })
+
+      if (res.status === 201) {
+        location.reload()
+      }
+    } catch (error) {
+      console.error('Gagal upload item:', error)
+    }
   }
-}
 
   return (
     <div className="">
@@ -135,13 +133,34 @@ const handleSubmit = async (e: React.FormEvent) => {
 
             <div>
               <Label htmlFor="category">Category</Label>
-              <Input
+              {/* <Input
                 id="category"
                 name="category"
                 placeholder="e.g., Main Dish"
                 value={formData.category}
                 onChange={handleChange}
-              />
+              /> */}
+              <div
+                className="border rounded-lg p-2 cursor-pointer bg-white"
+                onClick={() => setOpenDropdown(!openDropdown)}
+              >
+                {selectedCategory || 'Select Category'}
+              </div>
+              {openDropdown && (
+                <div className="absolute bg-white border rounded-lg mt-1 shadow-lg w-100 z-10">
+                  <ul className="flex flex-col">
+                    {['makanan', 'minuman', 'snack'].map((item) => (
+                      <li
+                        key={item}
+                        onClick={() => handleSelectCategory(item)}
+                        className="p-2 hover:bg-gray-100 cursor-pointer"
+                      >
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
 
             <div>
@@ -165,7 +184,7 @@ const handleSubmit = async (e: React.FormEvent) => {
             </div>
 
             <Button
-            onClick={handleSubmit}
+              onClick={handleSubmit}
               type="submit"
               className="w-full mt-4"
             >

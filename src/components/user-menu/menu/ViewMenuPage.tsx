@@ -44,12 +44,11 @@ const ViewMenuPage = (props: ViewMenuPageProps) => {
       {/* <div>{JSON.stringify(menus)}</div> */}
       <div className="flex justify-center font-bold text-greenPrimary">Menu</div>
       <div>Catergory bar here later</div>
-      {menus.map((menu) => (
-        <MenuList
-          key={menu.id}
-          data={menu}
-        />
-      ))} 
+     <div className="grid grid-cols-2 gap-4">
+  {menus.map((menu) => (
+    <MenuList key={menu.id} data={menu} />
+  ))}
+</div>
 
 
       <PaymentMethod />
